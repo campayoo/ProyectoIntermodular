@@ -2,24 +2,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Quicksand:wght@300;500;700&display=swap');
 
 :root {
-    /* Gaia-Tech Palette */
-    --ocean-deep: #004e92;
-    --ocean-mid: #0077be;
-    --ocean-light: #00c6ff;
-    --turquoise: #40e0d0;
+    /* Earth Travel Palette */
+    --sky-light: #87ceeb;
+    --sky-blue: #5dade2;
+    --sky-deep: #3498db;
 
-    --forest-green: #228b22;
-    --nature-light: #90ee90;
+    --forest-green: #27ae60;
+    --grass-green: #52be80;
+    --nature-light: #7dcea0;
 
-    --sand-brown: #f4a460;
-    --sand-light: #f5deb3;
+    --earth-brown: #8b6f47;
+    --soil-brown: #6d4c41;
+    --sand-beige: #d7ccc8;
 
-    --bg-dark: #050a10;
-    --glass-panel: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --mountain-gray: #95a5a6;
+    --cloud-white: #ecf0f1;
 
-    --text-main: #f0f8ff;
-    --text-accent: #40e0d0;
+    --bg-dark: #1a3a2e;
+    --bg-medium: #2d5f4d;
+    --glass-panel: rgba(125, 206, 160, 0.1);
+    --glass-border: rgba(125, 206, 160, 0.25);
+
+    --text-main: #f4f6f7;
+    --text-accent: #7dcea0;
 }
 
 * {
@@ -32,9 +37,7 @@ body {
     font-family: 'Quicksand', sans-serif;
     background-color: var(--bg-dark);
     background-image:
-        radial-gradient(circle at 15% 50%, rgba(0, 119, 190, 0.08) 0%, transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(34, 139, 34, 0.05) 0%, transparent 25%),
-        linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
+        linear-gradient(to bottom, #5dade2 0%, #3498db 40%, #2980b9 100%);
     background-attachment: fixed;
     color: var(--text-main);
     line-height: 1.6;
@@ -66,15 +69,92 @@ a {
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+/* Earth Travel Parallax Effects */
+#space-parallax {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.stars-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    opacity: 0.4;
+    will-change: transform;
+}
+
+/* Clouds Layer - Unified */
+.stars-far {
+    background:
+        radial-gradient(ellipse 200px 80px at 15% 20%, rgba(255, 255, 255, 0.7), transparent),
+        radial-gradient(ellipse 250px 100px at 45% 15%, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(ellipse 180px 70px at 75% 25%, rgba(255, 255, 255, 0.65), transparent),
+        radial-gradient(ellipse 220px 90px at 30% 40%, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(ellipse 190px 75px at 65% 35%, rgba(255, 255, 255, 0.55), transparent),
+        radial-gradient(ellipse 210px 85px at 85% 45%, rgba(255, 255, 255, 0.6), transparent);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+}
+
+/* Mountain Silhouettes - Unified */
+.stars-mid {
+    background: linear-gradient(to bottom, transparent 60%, rgba(52, 73, 94, 0.4) 65%, rgba(52, 73, 94, 0.6) 100%);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    clip-path: polygon(0% 70%, 10% 65%, 20% 68%, 30% 60%, 40% 63%,
+            50% 55%, 60% 58%, 70% 62%, 80% 57%, 90% 65%, 100% 70%,
+            100% 100%, 0% 100%);
+}
+
+/* Foreground Trees/Nature - Unified */
+.stars-near {
+    background:
+        radial-gradient(ellipse 80px 200px at 10% 85%, rgba(39, 174, 96, 0.6), transparent),
+        radial-gradient(ellipse 100px 220px at 25% 88%, rgba(46, 125, 50, 0.55), transparent),
+        radial-gradient(ellipse 90px 210px at 40% 82%, rgba(39, 174, 96, 0.65), transparent),
+        radial-gradient(ellipse 110px 230px at 60% 87%, rgba(46, 125, 50, 0.6), transparent),
+        radial-gradient(ellipse 95px 215px at 75% 85%, rgba(39, 174, 96, 0.58), transparent),
+        radial-gradient(ellipse 105px 225px at 90% 90%, rgba(46, 125, 50, 0.62), transparent);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    opacity: 0.6;
+}
+
+/* Atmospheric Haze */
+.nebula-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    background-image:
+        radial-gradient(ellipse at 30% 20%, rgba(135, 206, 235, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(125, 206, 160, 0.1) 0%, transparent 50%);
+    background-size: 100% 100%;
+    will-change: transform;
+    opacity: 0.5;
+}
+
 /* Header & Navigation */
 header {
-    background: rgba(5, 10, 16, 0.8);
+    background: rgba(41, 128, 185, 0.75);
     backdrop-filter: blur(15px);
     padding: 15px 0;
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 1px solid rgba(64, 224, 208, 0.2);
+    border-bottom: 1px solid rgba(93, 173, 226, 0.5);
     border-radius: 0 0 20px 20px;
 }
 
@@ -93,10 +173,11 @@ header {
 .logo {
     font-size: 1.8rem;
     font-weight: 800;
-    background: linear-gradient(to right, var(--turquoise), var(--ocean-light));
+    background: linear-gradient(to right, var(--nature-light), var(--forest-green));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(64, 224, 208, 0.3);
+    text-shadow: 0 0 20px rgba(125, 206, 160, 0.3);
 }
 
 nav ul {
@@ -115,8 +196,8 @@ nav a {
 }
 
 nav a:hover {
-    background: rgba(64, 224, 208, 0.1);
-    color: var(--turquoise);
+    background: rgba(125, 206, 160, 0.15);
+    color: var(--nature-light);
 }
 
 /* Sections */
@@ -155,8 +236,8 @@ section {
 }
 
 .section-title span {
-    color: var(--turquoise);
-    border-bottom: 3px solid var(--sand-brown);
+    color: var(--text-accent);
+    border-bottom: 3px solid var(--accent-cyan);
     padding-bottom: 10px;
     display: inline-block;
 }
@@ -185,11 +266,11 @@ section {
     font-size: 1.5rem;
     padding: 20px 40px;
     border-radius: 50px;
-    background: linear-gradient(45deg, var(--ocean-deep), var(--ocean-light));
-    border: 2px solid var(--turquoise);
+    background: linear-gradient(45deg, var(--forest-green), var(--grass-green));
+    border: 2px solid var(--nature-light);
     color: white;
-    box-shadow: 0 0 20px rgba(64, 224, 208, 0.4);
-    animation: pulse-ocean 3s infinite;
+    box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+    animation: pulse-green 3s infinite;
     cursor: pointer;
     margin-top: 30px;
     display: inline-block;
@@ -226,23 +307,28 @@ section {
 }
 
 .game-card {
-    background: var(--glass-panel);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--glass-border);
-    border-radius: 15px;
-    padding: 15px;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(135deg, rgba(125, 206, 160, 0.15), rgba(39, 174, 96, 0.1));
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--nature-light);
+    border-radius: 20px;
+    padding: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
 }
 
 .game-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: var(--sand-brown);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    transform: translateY(-10px) scale(1.05);
+    border-color: #f39c12;
+    box-shadow:
+        0 15px 35px rgba(243, 156, 18, 0.5),
+        0 0 25px rgba(241, 196, 15, 0.7),
+        inset 0 0 20px rgba(243, 156, 18, 0.15);
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.3), rgba(243, 156, 18, 0.2));
     z-index: 10;
 }
 
@@ -255,49 +341,76 @@ section {
 }
 
 .game-icon {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 3rem;
+    margin-bottom: 15px;
     text-align: center;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.2));
+    filter: drop-shadow(0 0 10px rgba(125, 206, 160, 0.6));
+    transition: all 0.3s ease;
+}
+
+.game-card:hover .game-icon {
+    transform: scale(1.1) rotate(5deg);
+    filter: drop-shadow(0 0 20px rgba(125, 206, 160, 0.9));
 }
 
 .game-title {
-    font-size: 1rem;
-    color: var(--turquoise);
-    margin-bottom: 5px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--nature-light);
+    margin-bottom: 8px;
     text-align: center;
     line-height: 1.2;
+    text-shadow: 0 0 10px rgba(125, 206, 160, 0.3);
 }
 
 .game-desc {
-    font-size: 0.75rem;
-    color: #ccc;
-    margin-bottom: 10px;
+    font-size: 0.8rem;
+    color: #e0e0e0;
+    margin-bottom: 12px;
     text-align: center;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 2.4em;
 }
 
 .difficulty {
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    margin-bottom: 10px;
-    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+    border-radius: 15px;
+    background: linear-gradient(90deg, var(--forest-green), var(--grass-green));
+    color: white;
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.4);
 }
 
 .play-btn {
     width: 100%;
-    font-size: 0.8rem;
-    padding: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 12px;
     margin-top: auto;
+    background: linear-gradient(90deg, var(--forest-green), var(--grass-green));
+    border: 2px solid var(--nature-light);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .play-btn:hover {
-    background: var(--sand-brown);
-    color: var(--bg-dark);
+    background: linear-gradient(90deg, var(--grass-green), var(--nature-light));
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 20px rgba(39, 174, 96, 0.5),
+        0 0 15px rgba(125, 206, 160, 0.6);
+    border-color: white;
 }
 
 /* Main Game Interface (Infinite Mode) */
@@ -385,17 +498,17 @@ section {
 }
 
 /* Animations */
-@keyframes pulse-ocean {
+@keyframes pulse-green {
     0% {
-        box-shadow: 0 0 0 0 rgba(64, 224, 208, 0.7);
+        box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7);
     }
 
     70% {
-        box-shadow: 0 0 0 20px rgba(64, 224, 208, 0);
+        box-shadow: 0 0 0 20px rgba(39, 174, 96, 0);
     }
 
     100% {
-        box-shadow: 0 0 0 0 rgba(64, 224, 208, 0);
+        box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
     }
 }
 
@@ -499,4 +612,230 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     color: #888;
     font-size: 0.9rem;
+}
+
+/* Stars Background */
+#stars-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: twinkle 2s infinite;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+    }
+}
+
+/* 3D Realistic Earth Visuals */
+.earth-visual {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 30px auto;
+    position: relative;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 0 20px rgba(64, 224, 208, 0.2));
+}
+
+.earth-sphere {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* Illustrated Earth with CSS */
+    background:
+        /* Ocean base */
+        radial-gradient(circle at 30% 30%, #4facfe, #00a8e8);
+    background-size: cover;
+    background-position: center;
+    box-shadow:
+        inset -30px -30px 50px rgba(0, 0, 0, 0.9),
+        inset 10px 10px 20px rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(39, 174, 96, 0.4);
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    animation: floating 6s ease-in-out infinite;
+}
+
+/* Illustrated Continents */
+.earth-sphere::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        /* Africa/Europe */
+        radial-gradient(ellipse 60px 80px at 52% 45%, #27ae60, transparent),
+        radial-gradient(ellipse 40px 50px at 48% 35%, #2ecc71, transparent),
+        /* Americas */
+        radial-gradient(ellipse 35px 90px at 25% 40%, #229954, transparent),
+        radial-gradient(ellipse 45px 70px at 22% 60%, #27ae60, transparent),
+        /* Asia */
+        radial-gradient(ellipse 70px 60px at 70% 35%, #1e8449, transparent),
+        radial-gradient(ellipse 50px 40px at 75% 45%, #239b56, transparent),
+        /* Australia */
+        radial-gradient(ellipse 30px 25px at 78% 65%, #27ae60, transparent);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    animation: spin-continents 20s linear infinite;
+    pointer-events: none;
+}
+
+/* Clouds */
+.earth-sphere::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-image:
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 20%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.6) 0%, transparent 25%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 30%);
+    background-size: 150px 150px;
+    opacity: 0.6;
+    animation: move-clouds 25s linear infinite;
+    z-index: 3;
+}
+
+.earth-atmosphere {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 60%, rgba(79, 172, 254, 0.4) 70%, transparent 80%);
+    z-index: 1;
+    animation: pulse-atmosphere 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.earth-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 350px;
+    height: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotateX(75deg);
+    z-index: 0;
+}
+
+.earth-orbit::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #fff;
+    animation: orbit-moon 8s linear infinite;
+}
+
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes spin-globe {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin-continents {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes move-map {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes move-clouds {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-30%);
+    }
+}
+
+@keyframes pulse-atmosphere {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+@keyframes orbit-moon {
+    0% {
+        transform: rotate(0deg) translateX(175px) rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg) translateX(175px) rotate(-360deg);
+    }
 }

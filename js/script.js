@@ -58,7 +58,79 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function initSystem() {
         renderLives();
+        initStars();
+        initScrollEffects();
         logSystem("Gaia-Tech OS Initialized. Waiting for user input.");
+    }
+
+    /**
+     * Initialize Background Stars
+     */
+    function initStars() {
+        const container = document.getElementById('stars-container');
+        if (!container) return;
+
+        const starCount = 100;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            // Random Position
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+
+            // Random Size & Delay
+            const size = Math.random() * 2 + 1;
+            const delay = Math.random() * 2;
+
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDelay = `${delay}s`;
+
+            container.appendChild(star);
+        }
+    }
+
+    /**
+     * Initialize Scroll-Based Parallax Effects
+     */
+    function initScrollEffects() {
+        const starsFar = document.querySelector('.stars-far');
+        const starsMid = document.querySelector('.stars-mid');
+        const starsNear = document.querySelector('.stars-near');
+        const nebula = document.querySelector('.nebula-layer');
+        const sections = document.querySelectorAll('section');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+
+            // Parallax star layers (different speeds)
+            if (starsFar) starsFar.style.transform = `translateY(${scrolled * 0.1}px)`;
+            if (starsMid) starsMid.style.transform = `translateY(${scrolled * 0.3}px)`;
+            if (starsNear) starsNear.style.transform = `translateY(${scrolled * 0.5}px)`;
+            if (nebula) nebula.style.transform = `translateY(${scrolled * 0.2}px) scale(1.1)`;
+
+            // Section fade-in on scroll
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (sectionTop < windowHeight * 0.75) {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                } else {
+                    section.style.opacity = '0';
+                    section.style.transform = 'translateY(50px)';
+                }
+            });
+        });
+
+        // Initial state for sections
+        sections.forEach(section => {
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        });
     }
 
     /**
