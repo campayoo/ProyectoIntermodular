@@ -1,152 +1,258 @@
 /*
  * script.js
- * Logic for the Video Game Project Main Interface
+ * Logic for Gaia-Tech Infinite Mode & Game Interface
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     // Game State
-    let lives = 4;
-    const maxLives = 4;
-    const gameActive = true;
+    const gameState = {
+        lives: 4,
+        maxLives: 4,
+        score: 0,
+        difficulty: 0, // 0 to 100
+        active: false,
+        currentGameIndex: -1
+    };
+
+    // Mock Games Database
+    const gamesCatalog = [
+        { title: "Juego Alpha", type: "Plataformas 2D" },
+        { title: "Cosmic Racer", type: "Arcade Racing" },
+        { title: "Neon Knight", type: "Rhythm Combat" },
+        { title: "Cyber Puzzle", type: "Logic / Puzzle" },
+        { title: "Pixel Sniper", type: "Shooter / Reflex" },
+        { title: "Retro Drift", type: "Driving Simulation" },
+        { title: "Mega Snake", type: "Classic Arcade" },
+        { title: "Block Breaker", type: "Physics Arcade" },
+        { title: "Ghost Hunter", type: "Survival Horror" }
+    ];
 
     // DOM Elements
-    const livesContainer = document.getElementById('lives-display');
-    const failButton = document.getElementById('simulate-fail-btn');
-    const gameMessage = document.getElementById('game-message');
+    const elements = {
+        livesContainer: document.getElementById('lives-display'),
+        scoreDisplay: document.getElementById('score-val'),
+        difficultyBar: document.getElementById('difficulty-bar'),
+        gameMessage: document.getElementById('game-message'),
+        gameIndicator: document.getElementById('current-game-indicator'),
+        btnNext: document.getElementById('next-game-btn'),
+        btnFail: document.getElementById('simulate-fail-btn'),
+        btnStart: document.getElementById('start-infinite-btn')
+    };
 
-    // Initialize Game UI
-    initGame();
+    // Initialize System
+    initSystem();
 
     // Event Listeners
-    if (failButton) {
-        failButton.addEventListener('click', handleFailSimulation);
+    if (elements.btnNext) elements.btnNext.addEventListener('click', nextGame);
+    if (elements.btnFail) elements.btnFail.addEventListener('click', handleFailsimulation);
+
+    // Optional: Link the hero button if not handled inline
+    if (elements.btnStart) {
+        elements.btnStart.addEventListener('click', () => {
+            startInfiniteMode();
+        });
     }
 
     /**
-     * Initialize the game state and UI
+     * System Initialization
      */
-    function initGame() {
+    function initSystem() {
         renderLives();
-        logSystem("System initialized. Ready player one.");
+        logSystem("Gaia-Tech OS Initialized. Waiting for user input.");
     }
 
     /**
-     * Render the visual representation of lives
+     * Start the Infinite Mode Loop
      */
-    function renderLives() {
-        if (!livesContainer) return;
+    function startInfiniteMode() {
+        gameState.lives = gameState.maxLives;
+        gameState.score = 0;
+        gameState.difficulty = 5; // Start with minimal difficulty
+        gameState.active = true;
 
-        livesContainer.innerHTML = '';
+        renderLives();
+        updateHUD();
 
-        // Create heart/life icons
-        for (let i = 0; i < maxLives; i++) {
-            const lifeIcon = document.createElement('span');
-            lifeIcon.classList.add('life-icon');
+        logSystem("Mode Infinite: ACTIVATED.");
 
-            if (i < lives) {
-                lifeIcon.innerHTML = '♥'; // Full life
-                lifeIcon.style.opacity = '1';
-                lifeIcon.style.color = 'var(--neon-red)';
-                lifeIcon.style.textShadow = '0 0 5px var(--neon-red)';
-            } else {
-                lifeIcon.innerHTML = '♡'; // Empty life
-                lifeIcon.style.opacity = '0.3';
-                lifeIcon.style.color = '#555';
-                lifeIcon.style.textShadow = 'none';
-            }
+        // Visual Feedback
+        updateGameMessage("INICIALIZANDO VIAJE...", "neutral");
 
-            livesContainer.appendChild(lifeIcon);
-        }
+        setTimeout(() => {
+            loadRandomGame();
+        }, 1000);
     }
 
     /**
-     * Simulate a failure in a microgame (loss of life)
+     * Load a random game from the catalog
      */
-    function handleFailSimulation() {
-        if (lives > 0) {
-            lives--;
-            renderLives();
+    function loadRandomGame() {
+        if (!gameState.active) return;
 
-            // Visual feedback for damage
-            triggerDamageEffect();
+        // Select random game distinct from current
+        let nextIndex;
+        do {
+            nextIndex = Math.floor(Math.random() * gamesCatalog.length);
+        } while (nextIndex === gameState.currentGameIndex && gamesCatalog.length > 1);
 
-            if (lives === 0) {
-                gameOver();
-            } else {
-                updateGameMessage("¡Cuidado! Has perdido una vida.", "warning");
-            }
-        } else {
-            // Reset for demo purposes
-            resetGame();
-        }
-    }
+        gameState.currentGameIndex = nextIndex;
+        const game = gamesCatalog[nextIndex];
 
-    /**
-     * Trigger a visual shake/flash effect on damage
-     */
-    function triggerDamageEffect() {
-        const gameInterface = document.querySelector('.game-interface');
-        if (gameInterface) {
-            gameInterface.style.borderColor = 'var(--neon-red)';
-            gameInterface.style.boxShadow = '0 0 30px var(--neon-red)';
-            gameInterface.style.transform = 'translate(5px, 5px)';
-
+        // Update UI
+        updateGameMessage("SISTEMA ACTIVO", "success");
+        if (elements.gameIndicator) {
+            elements.gameIndicator.style.opacity = '0';
             setTimeout(() => {
-                gameInterface.style.transform = 'translate(-5px, -5px)';
-            }, 50);
-
-            setTimeout(() => {
-                gameInterface.style.transform = 'translate(2px, -2px)';
-            }, 100);
-
-            setTimeout(() => {
-                gameInterface.style.borderColor = 'var(--neon-green)';
-                gameInterface.style.boxShadow = '0 0 30px rgba(10, 255, 0, 0.2)';
-                gameInterface.style.transform = 'translate(0, 0)';
+                elements.gameIndicator.innerText = `Cargando módulo: ${game.title} [${game.type}]...`;
+                elements.gameIndicator.style.opacity = '1';
+                elements.gameIndicator.style.color = getDifficultyColor();
             }, 300);
         }
     }
 
     /**
-     * Handle Game Over state
+     * Proceed to next game (Win condition simulation)
      */
-    function gameOver() {
-        updateGameMessage("GAME OVER. Pulsa par reiniciar.", "danger");
-        if (failButton) failButton.innerText = "REINICIAR SISTEMA";
+    function nextGame() {
+        if (!gameState.active) {
+            startInfiniteMode();
+            return;
+        }
+
+        // Increase Score & Difficulty
+        gameState.score += 150 + (gameState.difficulty * 2);
+        gameState.difficulty = Math.min(100, gameState.difficulty + 10);
+
+        updateHUD();
+        triggerSuccessEffect();
+        loadRandomGame();
     }
 
     /**
-     * Reset the game state
+     * Simulate Failure (Lose Life)
      */
-    function resetGame() {
-        lives = maxLives;
-        renderLives();
-        updateGameMessage("SISTEMA REINICIADO", "success");
-        if (failButton) failButton.innerText = "SIMULAR FALLO";
+    function handleFailsimulation() {
+        if (!gameState.active) return;
 
-        setTimeout(() => {
-            updateGameMessage("Esperando Microjuego...", "neutral");
-        }, 1500);
-    }
+        if (gameState.lives > 0) {
+            gameState.lives--;
+            renderLives();
+            triggerDamageEffect();
 
-    /**
-     * Update the text message in the game screen
-     * @param {string} text - The message to display
-     * @param {string} type - safe, warning, or danger
-     */
-    function updateGameMessage(text, type) {
-        if (gameMessage) {
-            gameMessage.innerText = text;
-            gameMessage.style.color = type === 'danger' ? 'var(--neon-red)' :
-                type === 'warning' ? '#ff9900' :
-                    '#fff';
+            // Penalty
+            gameState.score = Math.max(0, gameState.score - 50);
+            updateHUD();
+
+            if (gameState.lives === 0) {
+                gameOver();
+            } else {
+                updateGameMessage("¡ADVERTENCIA! Integridad del casco comprometida.", "warning");
+            }
         }
     }
 
     /**
-     * Simple internal logger
+     * Game Over State
      */
+    function gameOver() {
+        gameState.active = false;
+        updateGameMessage("SISTEMA CRÍTICO. JUEGO TERMINADO.", "danger");
+        if (elements.gameIndicator) elements.gameIndicator.innerText = `Puntuación Final: ${gameState.score}`;
+
+        if (elements.btnNext) elements.btnNext.innerText = "REINICIAR";
+    }
+
+    /**
+     * Render Life Icons
+     */
+    /**
+     * Render Life Icons
+     */
+    function renderLives() {
+        if (!elements.livesContainer) return;
+        elements.livesContainer.innerHTML = '';
+
+        for (let i = 0; i < gameState.maxLives; i++) {
+            const lifeKv = document.createElement('div');
+            lifeKv.classList.add('life-icon');
+
+            if (i < gameState.lives) {
+                lifeKv.innerHTML = '♥';
+                lifeKv.style.color = '#ff003c'; // Neon Red
+                lifeKv.style.textShadow = '0 0 10px #ff003c';
+                lifeKv.style.transform = 'scale(1)';
+            } else {
+                lifeKv.innerHTML = '💔';
+                lifeKv.style.color = '#555';
+                lifeKv.style.textShadow = 'none';
+                lifeKv.style.transform = 'scale(0.9)';
+                lifeKv.style.opacity = '0.5';
+            }
+            elements.livesContainer.appendChild(lifeKv);
+        }
+    }
+
+    /**
+     * Update Score and Difficulty UI
+     */
+    function updateHUD() {
+        // Update Score
+        if (elements.scoreDisplay) {
+            // Number animation (simple)
+            elements.scoreDisplay.innerText = gameState.score.toString().padStart(4, '0');
+        }
+
+        // Update Difficulty Bar
+        if (elements.difficultyBar) {
+            elements.difficultyBar.style.width = `${gameState.difficulty}%`;
+
+            // Change color based on difficulty
+            const color = getDifficultyColor();
+            elements.difficultyBar.style.background = color;
+        }
+    }
+
+    function getDifficultyColor() {
+        if (gameState.difficulty < 40) return 'linear-gradient(to right, var(--ocean-light), var(--turquoise))';
+        if (gameState.difficulty < 70) return 'linear-gradient(to right, var(--sand-brown), var(--sand-light))';
+        return 'linear-gradient(to right, var(--forest-green), #ff4500)';
+    }
+
+    /**
+     * Visual FX
+     */
+    function updateGameMessage(text, type) {
+        if (!elements.gameMessage) return;
+
+        elements.gameMessage.innerText = text;
+        elements.gameMessage.className = 'game-status-msg'; // Reset
+
+        if (type === 'danger') elements.gameMessage.style.color = '#ff4500';
+        else if (type === 'warning') elements.gameMessage.style.color = 'var(--sand-brown)';
+        else if (type === 'success') elements.gameMessage.style.color = 'var(--forest-green)';
+        else elements.gameMessage.style.color = 'var(--text-main)';
+    }
+
+    function triggerDamageEffect() {
+        const viewport = document.querySelector('.game-interface');
+        if (viewport) {
+            viewport.style.boxShadow = '0 0 40px #ff4500';
+            viewport.style.transform = 'translateX(10px)';
+            setTimeout(() => { viewport.style.transform = 'translateX(-10px)'; }, 50);
+            setTimeout(() => { viewport.style.transform = 'translateX(0)'; }, 100);
+            setTimeout(() => { viewport.style.boxShadow = '0 0 50px rgba(0, 119, 190, 0.2)'; }, 300);
+        }
+    }
+
+    function triggerSuccessEffect() {
+        const hud = document.querySelector('.hud');
+        if (hud) {
+            hud.style.borderColor = 'var(--turquoise)';
+            setTimeout(() => { hud.style.borderColor = 'rgba(255, 255, 255, 0.1)'; }, 300);
+        }
+    }
+
     function logSystem(msg) {
-        console.log(`[SYSTEM]: ${msg}`);
+        console.log(`[GAIA]: ${msg}`);
     }
 });
