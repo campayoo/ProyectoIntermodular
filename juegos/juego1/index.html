@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODS 14: Vida Submarina - Limpieza Oceánica</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="ui-layer">
+            <div class="stat">Plástico: <span id="score">0</span></div>
+            <div class="stat">Oxígeno: <span id="lives">100</span>%</div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="game-over">
+            <h1>MISIÓN FALLIDA</h1>
+            <p>El océano necesita más ayuda. Limpieza total: <span id="final-score">0</span></p>
+            <button onclick="resetGame()">REINTENTAR</button>
+        </div>
+    </div>
+
+    <script src="js/game.js" defer></script>
+</body>
+</html>

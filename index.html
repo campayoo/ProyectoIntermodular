@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROYECTO GAMING | Catálogo de Juegos</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Favicon placeholder -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+</head>
+
+<body>
+    <!-- Space Parallax Layers -->
+    <div id="space-parallax">
+        <div class="stars-layer stars-far"></div>
+        <div class="stars-layer stars-mid"></div>
+        <div class="stars-layer stars-near"></div>
+        <div class="nebula-layer"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    GAIA<span style="color:var(--turquoise)">TECH</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#intro">Inicio</a></li>
+                        <li><a href="#catalogo">Juegos</a></li>
+                        <li><a href="#main-game">Simulación</a></li>
+                        <li><a href="#docs">Docs</a></li>
+                    </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Introducción -->
+        <!-- Introducción -->
+        <!-- Introducción -->
+        <section id="intro">
+            <div id="stars-container"></div>
+            <div class="container">
+                <div class="earth-visual">
+                    <div class="earth-sphere"></div>
+                    <div class="earth-atmosphere"></div>
+                    <div class="earth-orbit"></div>
+                </div>
+
+                <div class="intro-card">
+                    <h2 class="section-title"><span>SISTEMA</span> GAIA</h2>
+                    <p style="font-size: 1.1em; color: #b0e0e6; margin-bottom: 20px;">Bienvenido a la evolución. Una
+                        interfaz orgánica diseñada para la exploración ludificada.</p>
+                    <p>Explora el catálogo o inicia el viaje sin fin a través de nuestra red neuronal de
+                        entretenimiento.</p>
+
+                    <button id="start-infinite-btn" class="hero-btn"
+                        onclick="document.getElementById('main-game-section').scrollIntoView({behavior: 'smooth'})">
+                        MODO INFINITO: EL VIAJE
+                    </button>
+                </div>
+            </div>
+
+            <div class="section-divider">
+                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                    preserveAspectRatio="none">
+                    <path
+                        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                        class="shape-fill"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Catálogo de Juegos -->
+        <section id="catalogo">
+            <div class="container">
+                <h2 class="section-title">CATÁLOGO</h2>
+                <div class="games-grid">
+                    <!-- Juego 1 - ODS 14 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🌊</div>
+                            <h3 class="game-title">Limpieza Oceánica</h3>
+                            <span class="difficulty diff-easy">ODS 14: Vida Submarina</span>
+                            <p class="game-desc">¡Recoge el plástico que contamina el mar! Usa el ratón para navegar con
+                                el barco, atrapa botellas y bolsas, pero ten cuidado de no molestar a los peces y
+                                tortugas.</p>
+                            <button onclick="openGame('juegos/juego1/index.html')" class="play-btn">RECOLECTAR
+                                PLÁSTICO</button>
+                        </div>
+                    </article>
+
+                    <!-- Juego 2 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🚀</div>
+                            <h3 class="game-title">Cosmic Racer</h3>
+                            <span class="difficulty diff-medium">Medio</span>
+                            <p class="game-desc">Carreras espaciales a alta velocidad.</p>
+                            <a href="juegos/juego2/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 3 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">⚔️</div>
+                            <h3 class="game-title">Neon Knight</h3>
+                            <span class="difficulty diff-hard">Difícil</span>
+                            <p class="game-desc">Combate rítmico con espadas láser.</p>
+                            <a href="juegos/juego3/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 4 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🧩</div>
+                            <h3 class="game-title">Cyber Puzzle</h3>
+                            <span class="difficulty diff-easy">Fácil</span>
+                            <p class="game-desc">Resuelve acertijos de lógica booleana.</p>
+                            <a href="juegos/juego4/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 5 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🎯</div>
+                            <h3 class="game-title">Pixel Sniper</h3>
+                            <span class="difficulty diff-medium">Medio</span>
+                            <p class="game-desc">Prueba de puntería y reflejos.</p>
+                            <a href="juegos/juego5/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 6 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🏎️</div>
+                            <h3 class="game-title">Retro Drift</h3>
+                            <span class="difficulty diff-hard">Difícil</span>
+                            <p class="game-desc">Controla el derrape en pistas de neón.</p>
+                            <a href="juegos/juego6/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 7 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🐍</div>
+                            <h3 class="game-title">Mega Snake</h3>
+                            <span class="difficulty diff-easy">Fácil</span>
+                            <p class="game-desc">La serpiente clásica con power-ups.</p>
+                            <a href="juegos/juego7/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 8 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">🧱</div>
+                            <h3 class="game-title">Block Breaker</h3>
+                            <span class="difficulty diff-medium">Medio</span>
+                            <p class="game-desc">Rompe muros usando física avanzada.</p>
+                            <a href="juegos/juego8/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+
+                    <!-- Juego 9 -->
+                    <article class="game-card">
+                        <div class="card-inner">
+                            <div class="game-icon">👻</div>
+                            <h3 class="game-title">Ghost Hunter</h3>
+                            <span class="difficulty diff-hard">Difícil</span>
+                            <p class="game-desc">Sobrevive en una mansión embrujada.</p>
+                            <a href="juegos/juego9/placeholder.html" class="play-btn">JUGAR</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Juego Principal (Simulación) -->
+        <!-- Juego Principal (Modo Infinito) -->
+        <section id="main-game-section">
+            <div class="container">
+                <h2 class="section-title"><span>SIMULACIÓN</span> INFINITA</h2>
+                <div class="game-interface">
+                    <div class="hud">
+                        <div class="score-display">PUNTOS: <span id="score-val">0000</span></div>
+
+                        <div class="difficulty-meter">
+                            <div class="difficulty-bar" id="difficulty-bar" style="width: 10%;"></div>
+                        </div>
+
+                        <div class="lives-container" id="lives-display">
+                            <!-- JS inyectará las vidas aquí -->
+                        </div>
+                    </div>
+
+                    <div class="game-viewport">
+                        <div id="game-message" class="game-status-msg">Esperando Inicialización...</div>
+                        <p id="current-game-indicator"
+                            style="color:var(--sand-brown); margin-bottom:20px; font-style:italic; opacity:0; transition:opacity 1s;">
+                            Cargando módulo...</p>
+
+                        <div class="controls" style="display:flex; gap:20px;">
+                            <button id="next-game-btn" class="action-btn"
+                                style="background:var(--forest-green);">INICIAR VIAJE</button>
+                            <button id="simulate-fail-btn" class="action-btn"
+                                style="background:var(--ocean-deep);">SIMULAR FALLO</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentación -->
+        <section id="docs">
+            <div class="container">
+                <h2 class="section-title">DOCUMENTACIÓN</h2>
+                <div class="docs-content">
+                    <div class="doc-block">
+                        <h3>Descripción del Proyecto</h3>
+                        <p>Este proyecto es una demostración técnica de una interfaz de videojuegos web moderna,
+                            utilizando estándares web puros sin dependencias externas.</p>
+                    </div>
+                    <div class="doc-block">
+                        <h3>Tecnologías</h3>
+                        <ul>
+                            <li><strong>HTML5 Semántico:</strong> Estructura limpia y accesible.</li>
+                            <li><strong>CSS3 Moderno:</strong> Variables, Flexbox, Grid y Animaciones.</li>
+                            <li><strong>Vanilla JavaScript:</strong> Lógica de estado y manipulación del DOM.</li>
+                        </ul>
+                    </div>
+                    <div class="doc-block">
+                        <h3>Estructura</h3>
+                        <p>El proyecto sigue una arquitectura de carpetas modular:</p>
+                        <pre
+                            style="background:#000; padding:10px; margin-top:10px; border-radius:5px; color:var(--neon-green);">
+PROYECTO/
+├── assets/ (Recursos)
+├── css/ (Estilos)
+├── js/ (Lógica)
+├── juegos/ (Módulos independientes)
+└── index.html</pre>
+                    </div>
+
+                    <!-- Development Roadmap (Kanban) -->
+                    <div class="doc-block">
+                        <h3>Roadmap de Desarrollo (Día 1)</h3>
+                        <div class="kanban-board">
+                            <!-- Backlog Column -->
+                            <div class="kanban-column">
+                                <h4 class="column-title" style="color: var(--text-main);">BACKLOG</h4>
+                                <div class="kanban-card card-backlog">
+                                    <span>Ideas de Juegos</span>
+                                </div>
+                                <div class="kanban-card card-backlog">
+                                    <span>Sistema de Usuarios</span>
+                                </div>
+                                <div class="kanban-card card-backlog">
+                                    <span>Modo Online</span>
+                                </div>
+                            </div>
+
+                            <!-- In Progress Column -->
+                            <div class="kanban-column">
+                                <h4 class="column-title" style="color: var(--neon-blue);">EN PROGRESO</h4>
+                                <div class="kanban-card card-progress">
+                                    <span>Desarrollo de Juegos</span>
+                                </div>
+                                <div class="kanban-card card-progress">
+                                    <span>Optimización CSS</span>
+                                </div>
+                            </div>
+
+                            <!-- Done Column -->
+                            <div class="kanban-column">
+                                <h4 class="column-title" style="color: var(--neon-green);">COMPLETADO (DÍA 1)</h4>
+                                <div class="kanban-card card-done">
+                                    <span>Estructura Web Base</span>
+                                </div>
+                                <div class="kanban-card card-done">
+                                    <span>Interfaz "Square"</span>
+                                </div>
+                                <div class="kanban-card card-done">
+                                    <span>Corrección de Rutas</span>
+                                </div>
+                                <div class="kanban-card card-done">
+                                    <span>Ajuste de Layout</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Proyecto Intermodular - Desarrollado por Pablo Campayo, Alfredo Rogé Moreno, Cesar Bel Belenguer
+        </p>
+    </footer>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeGame()">&times;</button>
+            <div id="game-container-modal">
+                <iframe id="game-iframe" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>
