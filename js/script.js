@@ -328,3 +328,34 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`[GAIA]: ${msg}`);
     }
 });
+
+/**
+ * Game Modal Functions
+ */
+function openGame(url) {
+    const modal = document.getElementById('game-modal');
+    const iframe = document.getElementById('game-iframe');
+    if (modal && iframe) {
+        iframe.src = url;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+    }
+}
+
+function closeGame() {
+    const modal = document.getElementById('game-modal');
+    const iframe = document.getElementById('game-iframe');
+    if (modal && iframe) {
+        modal.classList.remove('active');
+        iframe.src = '';
+        document.body.style.overflow = ''; // Restore scroll
+    }
+}
+
+// Close modal when clicking outside content
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('game-modal');
+    if (e.target === modal) {
+        closeGame();
+    }
+});

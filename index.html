@@ -82,14 +82,17 @@
             <div class="container">
                 <h2 class="section-title">CATÁLOGO</h2>
                 <div class="games-grid">
-                    <!-- Juego 1 -->
+                    <!-- Juego 1 - ODS 14 -->
                     <article class="game-card">
                         <div class="card-inner">
-                            <div class="game-icon">👾</div>
-                            <h3 class="game-title">Juego Alpha</h3>
-                            <span class="difficulty diff-easy">Fácil</span>
-                            <p class="game-desc">Aventura clásica de plataformas en 2D.</p>
-                            <a href="juegos/juego1/placeholder.html" class="play-btn">JUGAR</a>
+                            <div class="game-icon">🌊</div>
+                            <h3 class="game-title">Limpieza Oceánica</h3>
+                            <span class="difficulty diff-easy">ODS 14: Vida Submarina</span>
+                            <p class="game-desc">¡Recoge el plástico que contamina el mar! Usa el ratón para navegar con
+                                el barco, atrapa botellas y bolsas, pero ten cuidado de no molestar a los peces y
+                                tortugas.</p>
+                            <button onclick="openGame('juegos/juego1/index.html')" class="play-btn">RECOLECTAR
+                                PLÁSTICO</button>
                         </div>
                     </article>
 
@@ -307,6 +310,16 @@ PROYECTO/
         <p>&copy; 2026 Proyecto Intermodular - Desarrollado por Pablo Campayo, Alfredo Rogé Moreno, Cesar Bel Belenguer
         </p>
     </footer>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeGame()">&times;</button>
+            <div id="game-container-modal">
+                <iframe id="game-iframe" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="js/script.js"></script>
