@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ocean Cleanup – ¡Limpia el Océano!</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <div id="game-wrapper">
+        <!-- HUD -->
+        <div id="hud">
+            <div class="hud-item">
+                <span class="hud-icon">🗑️</span>
+                <span>Basura recogida: <strong id="trash-count">0</strong></span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-icon">🐟</span>
+                <span>Peces capturados: <strong id="fish-count">0</strong> / <span id="fish-limit">5</span></span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-icon">💨</span>
+                <span>Basura escapada: <strong id="escaped-count">0</strong> / <span id="escaped-limit">8</span></span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-icon">⭐</span>
+                <span>Puntos: <strong id="score">0</strong></span>
+            </div>
+            <div class="hud-item">
+                <span class="hud-icon">⏱️</span>
+                <span>Tiempo: <strong id="timer">60</strong>s</span>
+            </div>
+        </div>
+
+        <!-- Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Overlay de inicio -->
+        <div id="start-screen" class="overlay">
+            <div class="overlay-box">
+                <h1>🌊 Ocean Cleanup 🌊</h1>
+                <p>¡Limpia el océano haciendo clic en la basura!</p>
+                <ul>
+                    <li>🗑️ Haz clic en la <strong>basura</strong> para recogerla (+10 pts)</li>
+                    <li>🐟 Evita hacer clic en los <strong>peces</strong> (-5 pts, límite: 5)</li>
+                    <li>🦈 Los <strong>peces protegidos</strong> penalizan más (-20 pts, cuentan doble)</li>
+                    <li>💨 No dejes escapar más de <strong>8 basuras</strong></li>
+                </ul>
+                <button id="start-btn">¡Empezar!</button>
+            </div>
+        </div>
+
+        <!-- Overlay de fin -->
+        <div id="end-screen" class="overlay hidden">
+            <div class="overlay-box">
+                <h1 id="end-title">Fin del juego</h1>
+                <p id="end-message"></p>
+                <p>Puntuación final: <strong id="final-score">0</strong></p>
+                <p>Basura recogida: <strong id="final-trash">0</strong></p>
+                <button id="restart-btn">Jugar de nuevo</button>
+            </div>
+        </div>
+
+        <!-- Popup de penalización -->
+        <div id="penalty-popup" class="hidden"></div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+
+</html>

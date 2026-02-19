@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
         multiplier: 1.0,
         gameList: [
             'juegos/juego1/index.html',
-            'juegos/juego6/placeholder.html'
+            'juegos/juego6/placeholder.html',
+            'juegos/OceanCleanup/index.html'
         ] // Add more as they deploy
     };
 
