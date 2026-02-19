@@ -9,11 +9,11 @@ canvas.width = 800;
 canvas.height = 600;
 
 let score = 0;
-let lives = 100;
+let lives = 50; // More tension
 let gameActive = true;
 let gameItems = [];
 let particles = [];
-let difficulty = 0.8; // Starting slightly easier than before
+let difficulty = 2.0; // Higher starting difficulty
 
 const player = {
     x: 400,
@@ -36,8 +36,8 @@ class Item {
 
         this.x = canvas.width + 50;
         this.y = Math.random() * (canvas.height - 100) + 50;
-        this.size = this.isTrash ? 35 : 40; // Slightly larger hitboxes for trash to make it easier
-        this.speed = (1.5 + Math.random() * 2.5) * (1 + difficulty * 0.5); // Slower initial speed
+        this.size = this.isTrash ? 35 : 40;
+        this.speed = (3.0 + Math.random() * 4.0) * (1 + difficulty * 0.2); // Faster initial speed
         this.waveOffset = Math.random() * Math.PI * 2;
     }
 
@@ -68,8 +68,8 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 function spawnItems() {
-    // Increased spawn rate slightly but kept speed low at start
-    if (gameActive && Math.random() < 0.03 + (difficulty * 0.01)) {
+    // Faster spawn rate
+    if (gameActive && Math.random() < 0.05 + (difficulty * 0.015)) {
         gameItems.push(new Item());
     }
 }
@@ -105,10 +105,10 @@ function update() {
             if (item.isTrash) {
                 score += 10;
                 scoreSpan.innerText = score;
-                // CLEAR DIFFICULTY SCALING
-                difficulty = score / 300;
+                // Faster difficulty scaling
+                difficulty = 2.0 + (score / 150);
             } else {
-                lives -= 10; // More forgiving (was 20)
+                lives -= 25; // Critical hit for sea life
                 livesSpan.innerText = Math.max(0, lives);
                 if (lives <= 0) gameOver();
             }
@@ -151,8 +151,8 @@ function gameOver() {
 
 function resetGame() {
     score = 0;
-    lives = 100;
-    difficulty = 0.8;
+    lives = 50;
+    difficulty = 2.0;
     gameItems = [];
     scoreSpan.innerText = score;
     livesSpan.innerText = lives;
