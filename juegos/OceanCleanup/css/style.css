@@ -1,0 +1,179 @@
+/* ===== RESET & BASE ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #0a1628;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* ===== GAME WRAPPER ===== */
+#game-wrapper {
+    position: relative;
+    width: 900px;
+    height: 620px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0, 180, 255, 0.4), 0 0 120px rgba(0, 100, 200, 0.2);
+}
+
+/* ===== HUD ===== */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 16px;
+    background: linear-gradient(180deg, rgba(5, 20, 50, 0.95) 0%, rgba(5, 20, 50, 0.7) 100%);
+    border-bottom: 2px solid rgba(0, 200, 255, 0.3);
+    backdrop-filter: blur(6px);
+}
+
+.hud-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #c8eeff;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.hud-icon {
+    font-size: 18px;
+}
+
+.hud-item strong {
+    color: #00e5ff;
+    font-size: 15px;
+}
+
+/* ===== CANVAS ===== */
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+/* ===== OVERLAYS ===== */
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(5, 15, 40, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay-box {
+    background: linear-gradient(135deg, rgba(10, 40, 90, 0.95), rgba(5, 20, 60, 0.98));
+    border: 2px solid rgba(0, 200, 255, 0.4);
+    border-radius: 20px;
+    padding: 40px 50px;
+    text-align: center;
+    max-width: 500px;
+    box-shadow: 0 0 40px rgba(0, 180, 255, 0.3);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.overlay-box h1 {
+    font-size: 2.2rem;
+    color: #00e5ff;
+    text-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+    margin-bottom: 16px;
+}
+
+.overlay-box p {
+    color: #a8d8f0;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.overlay-box ul {
+    list-style: none;
+    text-align: left;
+    margin: 16px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.overlay-box ul li {
+    color: #c8eeff;
+    font-size: 0.9rem;
+    background: rgba(0, 150, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    border-left: 3px solid #00e5ff;
+}
+
+button {
+    background: linear-gradient(135deg, #0077cc, #00b4ff);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(0, 180, 255, 0.5);
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 30px rgba(0, 200, 255, 0.7);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* ===== PENALTY POPUP ===== */
+#penalty-popup {
+    position: absolute;
+    z-index: 30;
+    font-size: 1.4rem;
+    font-weight: 800;
+    pointer-events: none;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    transition: opacity 0.3s;
+}
+
+#penalty-popup.hidden {
+    display: none;
+}
