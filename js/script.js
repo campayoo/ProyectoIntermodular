@@ -1,332 +1,222 @@
-/*
+/**
  * script.js
- * Logic for Gaia-Tech Infinite Mode & Game Interface
+ * WORLDGAMES: Microgames for Sustainability
+ * Core Logic & Mission Control Hub
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Game State
-    const gameState = {
-        lives: 4,
-        maxLives: 4,
-        score: 0,
-        difficulty: 0, // 0 to 100
-        active: false,
-        currentGameIndex: -1
-    };
+    // 1. Initialize Particles
+    initParticles();
 
-    // Mock Games Database
-    const gamesCatalog = [
-        { title: "Juego Alpha", type: "Plataformas 2D" },
-        { title: "Cosmic Racer", type: "Arcade Racing" },
-        { title: "Neon Knight", type: "Rhythm Combat" },
-        { title: "Cyber Puzzle", type: "Logic / Puzzle" },
-        { title: "Pixel Sniper", type: "Shooter / Reflex" },
-        { title: "Retro Drift", type: "Driving Simulation" },
-        { title: "Mega Snake", type: "Classic Arcade" },
-        { title: "Block Breaker", type: "Physics Arcade" },
-        { title: "Ghost Hunter", type: "Survival Horror" }
-    ];
+    // 2. Audio Context for SFX (Cyber-Arcade style)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // DOM Elements
-    const elements = {
-        livesContainer: document.getElementById('lives-display'),
-        scoreDisplay: document.getElementById('score-val'),
-        difficultyBar: document.getElementById('difficulty-bar'),
-        gameMessage: document.getElementById('game-message'),
-        gameIndicator: document.getElementById('current-game-indicator'),
-        btnNext: document.getElementById('next-game-btn'),
-        btnFail: document.getElementById('simulate-fail-btn'),
-        btnStart: document.getElementById('start-infinite-btn')
-    };
+    function playSFX(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
 
-    // Initialize System
-    initSystem();
-
-    // Event Listeners
-    if (elements.btnNext) elements.btnNext.addEventListener('click', nextGame);
-    if (elements.btnFail) elements.btnFail.addEventListener('click', handleFailsimulation);
-
-    // Optional: Link the hero button if not handled inline
-    if (elements.btnStart) {
-        elements.btnStart.addEventListener('click', () => {
-            startInfiniteMode();
-        });
-    }
-
-    /**
-     * System Initialization
-     */
-    function initSystem() {
-        renderLives();
-        initStars();
-        initScrollEffects();
-        logSystem("Gaia-Tech OS Initialized. Waiting for user input.");
-    }
-
-    /**
-     * Initialize Background Stars
-     */
-    function initStars() {
-        const container = document.getElementById('stars-container');
-        if (!container) return;
-
-        const starCount = 100;
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-
-            // Random Position
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-
-            // Random Size & Delay
-            const size = Math.random() * 2 + 1;
-            const delay = Math.random() * 2;
-
-            star.style.left = `${x}%`;
-            star.style.top = `${y}%`;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.animationDelay = `${delay}s`;
-
-            container.appendChild(star);
+        if (type === 'hover') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        } else if (type === 'levelup') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        } else if (type === 'win') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
         }
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + (type === 'levelup' ? 0.5 : 0.2));
     }
 
-    /**
-     * Initialize Scroll-Based Parallax Effects
-     */
-    function initScrollEffects() {
-        const starsFar = document.querySelector('.stars-far');
-        const starsMid = document.querySelector('.stars-mid');
-        const starsNear = document.querySelector('.stars-near');
-        const nebula = document.querySelector('.nebula-layer');
-        const sections = document.querySelectorAll('section');
-
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-
-            // Parallax star layers (different speeds)
-            if (starsFar) starsFar.style.transform = `translateY(${scrolled * 0.1}px)`;
-            if (starsMid) starsMid.style.transform = `translateY(${scrolled * 0.3}px)`;
-            if (starsNear) starsNear.style.transform = `translateY(${scrolled * 0.5}px)`;
-            if (nebula) nebula.style.transform = `translateY(${scrolled * 0.2}px) scale(1.1)`;
-
-            // Section fade-in on scroll
-            sections.forEach(section => {
-                const sectionTop = section.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-
-                if (sectionTop < windowHeight * 0.75) {
-                    section.style.opacity = '1';
-                    section.style.transform = 'translateY(0)';
-                } else {
-                    section.style.opacity = '0';
-                    section.style.transform = 'translateY(50px)';
-                }
-            });
+    // 3. Hover SFX
+    const interactiveElements = document.querySelectorAll('button, .grid-slot:not(.locked), a');
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            if (!el.classList.contains('locked')) {
+                playSFX('hover');
+            }
         });
+    });
 
-        // Initial state for sections
-        sections.forEach(section => {
-            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-        });
-    }
+    // 4. Game State
+    const worldState = {
+        infiniteMode: false,
+        score: 0,
+        lives: 4,
+        difficulty: 'EASY', // EASY, NORMAL, HARD
+        multiplier: 1.0,
+        gameList: [
+            'juegos/juego1/index.html',
+            'juegos/juego6/placeholder.html'
+        ] // Add more as they deploy
+    };
 
-    /**
-     * Start the Infinite Mode Loop
-     */
-    function startInfiniteMode() {
-        gameState.lives = gameState.maxLives;
-        gameState.score = 0;
-        gameState.difficulty = 5; // Start with minimal difficulty
-        gameState.active = true;
+    // 5. Infinite Mode Controller
+    window.startInfiniteMode = function () {
+        const btn = document.getElementById('start-infinite-btn');
+        const overlay = document.getElementById('infinite-loading-overlay');
 
-        renderLives();
-        updateHUD();
+        btn.classList.add('opacity-50', 'pointer-events-none');
+        overlay.classList.remove('hidden');
 
-        logSystem("Mode Infinite: ACTIVATED.");
-
-        // Visual Feedback
-        updateGameMessage("INICIALIZANDO VIAJE...", "neutral");
+        playSFX('levelup');
 
         setTimeout(() => {
-            loadRandomGame();
+            worldState.infiniteMode = true;
+            worldState.score = 0;
+            worldState.lives = 4;
+            worldState.difficulty = 'EASY';
+            worldState.multiplier = 1.0;
+
+            updateInfiniteHUD();
+            overlay.classList.add('hidden');
+            btn.classList.remove('opacity-50', 'pointer-events-none');
+
+            launchNextMission();
+        }, 1500);
+    };
+
+    function launchNextMission() {
+        if (worldState.lives <= 0) return handleGameOver();
+
+        // Pick a random game (currently only one, so we "fake" it with modifiers)
+        const randomGame = worldState.gameList[Math.floor(Math.random() * worldState.gameList.length)];
+
+        // Visual transition "GET READY"
+        openGame(randomGame);
+
+        // Simulate game result for demo purposes (usually handled by postMessage from iframe)
+        // In a real scenario, the iframe sends 'win' or 'loss'
+        // For now, let's auto-win or auto-progress after 8 seconds
+        startTimer(8000, () => {
+            handleMissionSuccess();
+        });
+    }
+
+    function handleMissionSuccess() {
+        worldState.score++;
+        playSFX('win');
+        checkDifficultyJump();
+        updateInfiniteHUD();
+
+        // Show success briefly then next
+        setTimeout(() => {
+            launchNextMission();
         }, 1000);
     }
 
-    /**
-     * Load a random game from the catalog
-     */
-    function loadRandomGame() {
-        if (!gameState.active) return;
+    function checkDifficultyJump() {
+        const modal = document.getElementById('game-modal');
+        const indicator = document.getElementById('difficulty-indicator');
+        const alert = document.getElementById('level-change-alert');
+        const alertText = document.getElementById('level-alert-text');
+        const alertSub = document.getElementById('level-alert-subtext');
 
-        // Select random game distinct from current
-        let nextIndex;
-        do {
-            nextIndex = Math.floor(Math.random() * gamesCatalog.length);
-        } while (nextIndex === gameState.currentGameIndex && gamesCatalog.length > 1);
+        let jump = false;
 
-        gameState.currentGameIndex = nextIndex;
-        const game = gamesCatalog[nextIndex];
+        if (worldState.score === 10 && worldState.difficulty === 'EASY') {
+            worldState.difficulty = 'NORMAL';
+            worldState.multiplier = 1.2;
+            modal.classList.add('level-flash-normal');
+            alertText.textContent = '¡NIVEL NORMAL!';
+            alertSub.textContent = 'VELOCIDAD x1.2';
+            alertText.className = 'text-6xl md:text-8xl font-black italic tracking-tighter mb-2 text-yellow-400 opacity-100 scale-100';
+            jump = true;
+        } else if (worldState.score === 20 && worldState.difficulty === 'NORMAL') {
+            worldState.difficulty = 'HARD';
+            worldState.multiplier = 1.5;
+            modal.classList.remove('level-flash-normal');
+            modal.classList.add('level-flash-hard');
+            alertText.textContent = '¡NIVEL CRÍTICO!';
+            alertSub.textContent = 'VELOCIDAD x1.5';
+            alertText.className = 'text-6xl md:text-8xl font-black italic tracking-tighter mb-2 text-red-500 opacity-100 scale-100';
+            jump = true;
+        }
 
-        // Update UI
-        updateGameMessage("SISTEMA ACTIVO", "success");
-        if (elements.gameIndicator) {
-            elements.gameIndicator.style.opacity = '0';
+        if (jump) {
+            playSFX('levelup');
+            alert.classList.remove('hidden');
             setTimeout(() => {
-                elements.gameIndicator.innerText = `Cargando módulo: ${game.title} [${game.type}]...`;
-                elements.gameIndicator.style.opacity = '1';
-                elements.gameIndicator.style.color = getDifficultyColor();
-            }, 300);
+                alert.classList.add('hidden');
+            }, 2000);
+
+            indicator.textContent = `Nivel: ${worldState.difficulty} (x${worldState.multiplier})`;
+            indicator.classList.add('border-cyan-400', 'text-white');
         }
     }
 
-    /**
-     * Proceed to next game (Win condition simulation)
-     */
-    function nextGame() {
-        if (!gameState.active) {
-            startInfiniteMode();
-            return;
+    function updateInfiniteHUD() {
+        document.getElementById('infinite-score').textContent = worldState.score.toString().padStart(2, '0');
+
+        const livesContainer = document.getElementById('infinite-lives');
+        livesContainer.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+            const life = document.createElement('span');
+            life.textContent = '🌍';
+            if (i >= worldState.lives) life.classList.add('grayscale', 'opacity-20');
+            livesContainer.appendChild(life);
         }
-
-        // Increase Score & Difficulty
-        gameState.score += 150 + (gameState.difficulty * 2);
-        gameState.difficulty = Math.min(100, gameState.difficulty + 10);
-
-        updateHUD();
-        triggerSuccessEffect();
-        loadRandomGame();
     }
 
-    /**
-     * Simulate Failure (Lose Life)
-     */
-    function handleFailsimulation() {
-        if (!gameState.active) return;
+    function startTimer(duration, callback) {
+        const timerBar = document.getElementById('microgame-timer');
+        let start = null;
 
-        if (gameState.lives > 0) {
-            gameState.lives--;
-            renderLives();
-            triggerDamageEffect();
+        function step(timestamp) {
+            if (!start) start = timestamp;
+            const progress = timestamp - start;
+            const remaining = Math.max(0, 100 - (progress / duration) * 100);
+            timerBar.style.width = remaining + '%';
 
-            // Penalty
-            gameState.score = Math.max(0, gameState.score - 50);
-            updateHUD();
-
-            if (gameState.lives === 0) {
-                gameOver();
+            if (progress < duration) {
+                window.requestAnimationFrame(step);
             } else {
-                updateGameMessage("¡ADVERTENCIA! Integridad del casco comprometida.", "warning");
+                callback();
             }
         }
+        window.requestAnimationFrame(step);
     }
 
-    /**
-     * Game Over State
-     */
-    function gameOver() {
-        gameState.active = false;
-        updateGameMessage("SISTEMA CRÍTICO. JUEGO TERMINADO.", "danger");
-        if (elements.gameIndicator) elements.gameIndicator.innerText = `Puntuación Final: ${gameState.score}`;
-
-        if (elements.btnNext) elements.btnNext.innerText = "REINICIAR";
+    function handleGameOver() {
+        alert(`PLANETA AGOTADO. Score Final: ${worldState.score}`);
+        closeGame();
     }
 
-    /**
-     * Render Life Icons
-     */
-    /**
-     * Render Life Icons
-     */
-    function renderLives() {
-        if (!elements.livesContainer) return;
-        elements.livesContainer.innerHTML = '';
-
-        for (let i = 0; i < gameState.maxLives; i++) {
-            const lifeKv = document.createElement('div');
-            lifeKv.classList.add('life-icon');
-
-            if (i < gameState.lives) {
-                lifeKv.innerHTML = '♥';
-                lifeKv.style.color = '#ff003c'; // Neon Red
-                lifeKv.style.textShadow = '0 0 10px #ff003c';
-                lifeKv.style.transform = 'scale(1)';
-            } else {
-                lifeKv.innerHTML = '💔';
-                lifeKv.style.color = '#555';
-                lifeKv.style.textShadow = 'none';
-                lifeKv.style.transform = 'scale(0.9)';
-                lifeKv.style.opacity = '0.5';
-            }
-            elements.livesContainer.appendChild(lifeKv);
+    // 6. Particles.js Configuration
+    function initParticles() {
+        if (window.particlesJS) {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": ["#26BDE2", "#FCC30B", "#3EB049"] },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.2, "random": true },
+                    "size": { "value": 2, "random": true },
+                    "line_linked": { "enable": false },
+                    "move": { "enable": true, "speed": 0.8, "direction": "none", "random": true, "out_mode": "out" }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": { "onhover": { "enable": true, "mode": "bubble" }, "resize": true },
+                    "modes": { "bubble": { "distance": 200, "size": 4, "duration": 2, "opacity": 0.8 } }
+                }
+            });
         }
     }
 
-    /**
-     * Update Score and Difficulty UI
-     */
-    function updateHUD() {
-        // Update Score
-        if (elements.scoreDisplay) {
-            // Number animation (simple)
-            elements.scoreDisplay.innerText = gameState.score.toString().padStart(4, '0');
-        }
-
-        // Update Difficulty Bar
-        if (elements.difficultyBar) {
-            elements.difficultyBar.style.width = `${gameState.difficulty}%`;
-
-            // Change color based on difficulty
-            const color = getDifficultyColor();
-            elements.difficultyBar.style.background = color;
-        }
-    }
-
-    function getDifficultyColor() {
-        if (gameState.difficulty < 40) return 'linear-gradient(to right, var(--ocean-light), var(--turquoise))';
-        if (gameState.difficulty < 70) return 'linear-gradient(to right, var(--sand-brown), var(--sand-light))';
-        return 'linear-gradient(to right, var(--forest-green), #ff4500)';
-    }
-
-    /**
-     * Visual FX
-     */
-    function updateGameMessage(text, type) {
-        if (!elements.gameMessage) return;
-
-        elements.gameMessage.innerText = text;
-        elements.gameMessage.className = 'game-status-msg'; // Reset
-
-        if (type === 'danger') elements.gameMessage.style.color = '#ff4500';
-        else if (type === 'warning') elements.gameMessage.style.color = 'var(--sand-brown)';
-        else if (type === 'success') elements.gameMessage.style.color = 'var(--forest-green)';
-        else elements.gameMessage.style.color = 'var(--text-main)';
-    }
-
-    function triggerDamageEffect() {
-        const viewport = document.querySelector('.game-interface');
-        if (viewport) {
-            viewport.style.boxShadow = '0 0 40px #ff4500';
-            viewport.style.transform = 'translateX(10px)';
-            setTimeout(() => { viewport.style.transform = 'translateX(-10px)'; }, 50);
-            setTimeout(() => { viewport.style.transform = 'translateX(0)'; }, 100);
-            setTimeout(() => { viewport.style.boxShadow = '0 0 50px rgba(0, 119, 190, 0.2)'; }, 300);
-        }
-    }
-
-    function triggerSuccessEffect() {
-        const hud = document.querySelector('.hud');
-        if (hud) {
-            hud.style.borderColor = 'var(--turquoise)';
-            setTimeout(() => { hud.style.borderColor = 'rgba(255, 255, 255, 0.1)'; }, 300);
-        }
-    }
-
-    function logSystem(msg) {
-        console.log(`[GAIA]: ${msg}`);
-    }
+    // 7. System UI effects
+    console.log("%c WORLDGAMES SYSTEM ONLINE :: KERNEL_LOADED ", "background: #111; color: #26BDE2; font-weight: bold; padding: 5px;");
 });
 
 /**
@@ -337,8 +227,9 @@ function openGame(url) {
     const iframe = document.getElementById('game-iframe');
     if (modal && iframe) {
         iframe.src = url;
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scroll
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
     }
 }
 
@@ -346,16 +237,19 @@ function closeGame() {
     const modal = document.getElementById('game-modal');
     const iframe = document.getElementById('game-iframe');
     if (modal && iframe) {
-        modal.classList.remove('active');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
         iframe.src = '';
-        document.body.style.overflow = ''; // Restore scroll
+        document.body.style.overflow = '';
+        // Reset effects
+        modal.classList.remove('level-flash-normal', 'level-flash-hard');
     }
 }
 
-// Close modal when clicking outside content
+// Close on backdrop click (optional, usually disabled in arcade mode to prevent accidental close)
 window.addEventListener('click', (e) => {
     const modal = document.getElementById('game-modal');
     if (e.target === modal) {
-        closeGame();
+        // closeGame(); 
     }
 });
