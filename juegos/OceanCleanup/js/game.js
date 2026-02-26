@@ -32,7 +32,7 @@ resizeCanvas();
 // ── Constants ─────────────────────────────────────────────
 const FISH_LIMIT = 5;   // max fish clicks before lose
 const ESCAPED_LIMIT = 8;   // max trash escaped before lose
-const GAME_DURATION = 60;  // seconds
+const GAME_DURATION = 15;  // seconds
 const HUD_HEIGHT = 50;  // px reserved for HUD
 
 // ── Trash types ───────────────────────────────────────────
@@ -198,13 +198,13 @@ function updateDrawParticles() {
 // ── Entity creation ───────────────────────────────────────
 function createEntity() {
     const W = canvas.width, H = canvas.height;
-    const isTrash = Math.random() < 0.55; // 55% trash, 45% fish
+    const isTrash = Math.random() < 0.35; // 35% trash, 65% fish
     const type = isTrash ? pick(TRASH_TYPES) : pick(FISH_TYPES);
 
     // Spawn from left or right edge, travel across
     const fromLeft = Math.random() < 0.5;
-    const y = rand(HUD_HEIGHT + type.size, H - type.size - 10);
-    const speed = rand(1.2, 2.8);
+    const y = rand(HUD_HEIGHT + 40, H - 40);
+    const speed = rand(3.5, 7.5);
 
     return {
         isTrash,
@@ -216,7 +216,7 @@ function createEntity() {
         size: type.size,
         emoji: type.emoji,
         wobble: rand(0, Math.PI * 2),
-        wobbleSpeed: rand(0.03, 0.07),
+        wobbleSpeed: rand(0.05, 0.12),
         scale: 1,
         scaleDir: 0,
         alive: true,
@@ -230,7 +230,7 @@ function spawnEntity() {
     entities.push(createEntity());
     // Vary spawn interval: faster as time runs out
     const elapsed = GAME_DURATION - timeLeft;
-    const interval = Math.max(600, 1500 - elapsed * 12);
+    const interval = Math.max(200, 700 - elapsed * 30);
     spawnTimer = setTimeout(spawnEntity, interval);
 }
 
