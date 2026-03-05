@@ -1,0 +1,393 @@
+:root {
+    --ods3-green: #4C9B41;
+    --vital-red: #ef4444;
+    --vital-yellow: #eab308;
+    --vital-purple: #a855f7;
+    --vital-black: #020617;
+    --bg-dark: #020617;
+    --card-dark: #0f172a;
+    --text-light: #f8fafc;
+    --vital-gray: #94a3b8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: default;
+}
+
+body {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    font-family: 'Outfit', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.game-container.vital-v12 {
+    width: 95vw;
+    max-width: 1200px;
+    height: 90vh;
+    background: var(--card-dark);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    z-index: 10;
+}
+
+.hud-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.hud-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: var(--vital-gray);
+    letter-spacing: 2px;
+}
+
+.hud-value {
+    font-size: 1.5rem;
+    font-weight: 950;
+    color: white;
+}
+
+.score-value {
+    font-size: 3.5rem;
+    font-weight: 950;
+    color: var(--vital-red);
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Integrity System */
+.integrity-system {
+    margin-bottom: 2.5rem;
+    z-index: 10;
+}
+
+.integrity-meta {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 900;
+    color: var(--vital-gray);
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+}
+
+.integrity-bar-back {
+    height: 10px;
+    background: #1e293b;
+    border-radius: 5px;
+}
+
+.integrity-bar-fill {
+    height: 100%;
+    background: var(--vital-red);
+    width: 100%;
+    transition: width 0.3s ease, background 0.5s ease;
+    border-radius: 5px;
+}
+
+/* Layout */
+.game-layout {
+    flex-grow: 1;
+    display: flex;
+    gap: 2rem;
+}
+
+.game-stage {
+    flex: 2;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.vital-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
+    position: relative;
+}
+
+/* Rhythm Lanes */
+.rhythm-lanes {
+    position: absolute;
+    inset: 0;
+    display: flex;
+}
+
+.lane {
+    flex: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.hit-zone {
+    height: 100px;
+    background: linear-gradient(to top, rgba(239, 68, 68, 0.05), transparent);
+    border-top: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.lane.active {
+    background: linear-gradient(to bottom, transparent, rgba(239, 68, 68, 0.1));
+}
+
+.lane-label {
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
+    text-align: center;
+    font-weight: 950;
+    color: white;
+    opacity: 0.1;
+    font-size: 2.5rem;
+}
+
+.lane.active .lane-label {
+    opacity: 0.8;
+    color: var(--vital-red);
+    transform: scale(1.1);
+}
+
+/* The Heart Emoji */
+.heart-container {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 5;
+}
+
+.heart-emoji {
+    font-size: 8rem;
+    animation: HeartPulseEmoji 1s infinite alternate cubic-bezier(0.4, 0, 0.6, 1);
+    filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
+    user-select: none;
+    transition: opacity 0.5s;
+}
+
+@keyframes HeartPulseEmoji {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.15);
+    }
+}
+
+/* Violent Screen Shake */
+.screen-shake {
+    animation: shake 0.2s infinite;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+/* Notes */
+.note {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--vital-red);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.note-double {
+    border: 3px solid white;
+}
+
+/* Effect Layers */
+#ripple-container,
+#particle-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--vital-red);
+    border-radius: 50%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s;
+}
+
+.ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    opacity: 0;
+    animation: RippleAnim 1.5s ease-out;
+}
+
+@keyframes RippleAnim {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.5;
+    }
+
+    100% {
+        width: 1200px;
+        height: 1200px;
+        opacity: 0;
+        border-width: 0.5px;
+    }
+}
+
+/* Overlays */
+.ui-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 200;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--card-dark);
+    padding: 3.5rem;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+    max-width: 550px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+}
+
+.title-vital {
+    font-size: 3.5rem;
+    font-weight: 950;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.badge-ods {
+    background: var(--vital-red);
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 100px;
+    font-weight: 900;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.btn-vital {
+    background: var(--vital-red);
+    color: white;
+    border: none;
+    padding: 1.3rem 3rem;
+    border-radius: 20px;
+    font-weight: 950;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+    margin-top: 1rem;
+}
+
+.btn-vital:hover {
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none !important;
+}
