@@ -1,22 +1,104 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escudo de la Justicia - ODS 16</title>
-    <!-- Phaser 3 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <title>El Reparto Justo - ODS 5</title>
+    <meta name="description"
+        content="Juego interactivo sobre corresponsabilidad y reparto equitativo de tareas. ODS 5: Igualdad de Género.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <div id="header">
-        <h1>ODS 16: Paz, Justicia e Instituciones Sólidas</h1>
-        <p>Defiende las instituciones de la corrupción y el conflicto.<br>
-        <strong>Mueve el ratón o desliza el dedo</strong> alrededor del centro para usar tu escudo orbital y desviar las amenazas.</p>
+    <div class="game-wrapper">
+
+        <!-- ═══ PANTALLA DE INICIO ═══ -->
+        <div id="start-screen" class="overlay active">
+            <div class="floating-icons-bg" id="floating-bg"></div>
+            <div class="start-content">
+                <div class="ods-badge">ODS 05 · IGUALDAD DE GÉNERO</div>
+                <h1 class="game-title">El Reparto<br>Justo</h1>
+                <p class="game-subtitle">Equilibra la carga de tareas entre ambas personas</p>
+                <button id="start-btn" class="btn-start">¡EMPEZAR!</button>
+                <div class="start-hint">Arrastra las tareas · Equilibra la balanza</div>
+            </div>
+        </div>
+
+        <!-- ═══ HUD SUPERIOR ═══ -->
+        <header class="game-hud">
+            <div class="hud-left">
+                <span class="hud-label">RONDA</span>
+                <span id="hud-round" class="hud-value">01</span>
+            </div>
+            <div class="hud-center">
+                <div class="timer-ring" id="timer-ring">
+                    <svg viewBox="0 0 100 100">
+                        <circle class="timer-track" cx="50" cy="50" r="45"></circle>
+                        <circle class="timer-fill" id="timer-fill" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <span id="timer-text" class="timer-text">15</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <span class="hud-label">PUNTOS</span>
+                <span id="hud-score" class="hud-value">0</span>
+            </div>
+        </header>
+
+        <!-- ═══ ÁREA DE JUEGO PRINCIPAL ═══ -->
+        <main class="game-area">
+            <!-- Zona Persona A -->
+            <div class="drop-zone" id="zone-a" data-zone="a">
+                <div class="zone-label">Persona A</div>
+                <div class="zone-items" id="items-a"></div>
+                <div class="zone-count"><span id="count-a">0</span> tareas</div>
+            </div>
+
+            <!-- Balanza Central -->
+            <div class="balance-column">
+                <div class="balance-visual">
+                    <div class="balance-beam" id="balance-beam">
+                        <div class="beam-line"></div>
+                        <div class="beam-dot left"></div>
+                        <div class="beam-dot right"></div>
+                    </div>
+                    <div class="balance-base"></div>
+                </div>
+                <div class="task-spawner" id="task-spawner"></div>
+            </div>
+
+            <!-- Zona Persona B -->
+            <div class="drop-zone" id="zone-b" data-zone="b">
+                <div class="zone-label">Persona B</div>
+                <div class="zone-items" id="items-b"></div>
+                <div class="zone-count"><span id="count-b">0</span> tareas</div>
+            </div>
+        </main>
+
+        <!-- ═══ OVERLAY DE RESULTADO ═══ -->
+        <div id="result-overlay" class="overlay hidden">
+            <div class="result-card" id="result-card">
+                <div id="result-icon" class="result-icon"></div>
+                <h2 id="result-title" class="result-title"></h2>
+                <p id="result-msg" class="result-msg"></p>
+                <div class="result-stats">
+                    <div class="stat"><span class="stat-label">Persona A</span><span id="stat-a"
+                            class="stat-value">0</span></div>
+                    <div class="stat"><span class="stat-label">Persona B</span><span id="stat-b"
+                            class="stat-value">0</span></div>
+                </div>
+                <div class="result-buttons">
+                    <button id="btn-next" class="btn-action btn-next">Siguiente Ronda →</button>
+                    <button id="btn-retry" class="btn-action btn-retry">Reintentar ↻</button>
+                </div>
+            </div>
+        </div>
+
     </div>
-    
-    <div id="game-container"></div>
-    
-    <script src="game.js"></script>
+
+    <script src="js/game.js"></script>
 </body>
+
 </html>
