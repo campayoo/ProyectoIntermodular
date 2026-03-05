@@ -187,6 +187,7 @@
                         MISIÓN</button>
                 </div>
 
+
                 <!-- Template for Construction Slots -->
                 <template id="construction-slot-template">
                     <div
@@ -227,18 +228,51 @@
                             { ods: 1, name: 'No Poverty', icon: '🏠', label: 'Fin de la Pobreza' },
                             { ods: 7, name: 'Solar Clean', icon: '☀️', label: 'Energía Asequible' },
                             { ods: 15, name: 'Fast Reforest', icon: '🌲', label: 'Ecosistemas Terrestres' },
-                            { ods: 12, name: 'Trash Sorter', icon: '♻️', label: 'Consumo Responsable' },
                             { ods: 13, name: 'CO2 Filter', icon: '☁️', label: 'Acción por el Clima' },
+                            {
+                                ods: 12,
+                                name: 'Trash Sorter',
+                                icon: '♻️',
+                                label: 'Consumo Responsable',
+                                active: true,
+                                url: 'juegos/juego7/index.html',
+                                description: 'Recicla y limpia la ciudad para un futuro sostenible. Micro-sesión de 15 segundos.'
+                            },
                             { ods: 2, name: 'Crop Harvest', icon: '🌾', label: 'Hambre Cero' },
                             { ods: 11, name: 'Bike Path', icon: '🚲', label: 'Ciudades Sostenibles' }
                         ];
 
                         constructionData.forEach(data => {
-                            const clone = template.content.cloneNode(true);
-                            clone.querySelector('.title-placeholder').textContent = data.name;
-                            clone.querySelector('.icon-placeholder').textContent = data.icon;
-                            clone.querySelector('.ods-label').textContent = `ODS ${data.ods}: ${data.label.toUpperCase()}`;
-                            grid.appendChild(clone);
+                            if (data.active) {
+                                // Inyectar slot ACTIVO
+                                const activeSlot = `
+                                    <div class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods${data.ods}/30">
+                                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                                            <span class="text-6xl">${data.icon}</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 mb-4">
+                                            <span class="px-2 py-0.5 bg-ods${data.ods} text-white text-[10px] font-extrabold rounded uppercase">READY</span>
+                                            <span class="text-gray-500 text-[10px] font-bold">ODS ${data.ods}: ${data.label.toUpperCase()}</span>
+                                        </div>
+                                        <h3 class="text-2xl font-bold mb-2">${data.name}</h3>
+                                        <p class="text-gray-400 text-sm mb-6">${data.description}</p>
+                                        <div class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                                            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                                            <span class="text-ods${data.ods} font-bold mono" id="record-ods${data.ods}">0000</span>
+                                        </div>
+                                        <button onclick="openGame('${data.url}')"
+                                            class="w-full py-4 bg-ods${data.ods} hover:bg-ods${data.ods}/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR MISIÓN</button>
+                                    </div>
+                                `;
+                                grid.insertAdjacentHTML('beforeend', activeSlot);
+                            } else {
+                                // Inyectar slot de CONSTRUCCIÓN
+                                const clone = template.content.cloneNode(true);
+                                clone.querySelector('.title-placeholder').textContent = data.name;
+                                clone.querySelector('.icon-placeholder').textContent = data.icon;
+                                clone.querySelector('.ods-label').textContent = `ODS ${data.ods}: ${data.label.toUpperCase()}`;
+                                grid.appendChild(clone);
+                            }
                         });
                     });
                 </script>

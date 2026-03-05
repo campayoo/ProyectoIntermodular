@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODS 12: Producción Responsable - Click & Clean</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div id="game-container">
+        <div id="ui-layer">
+            <div class="stat">Ronda: <span id="round">1</span></div>
+            <div class="stat">Objetivo: <span id="target">5</span></div>
+            <div class="stat">Basurillas: <span id="score">0</span></div>
+            <div class="stat">Tiempo: <span id="timer">10</span>s</div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="game-over">
+            <h1>MISIÓN FINALIZADA</h1>
+            <p>Has recuperado <span id="final-score">0</span> materiales para el planeta.</p>
+            <p id="feedback-text"></p>
+            <button onclick="resetGame()">REINTENTAR</button>
+        </div>
+
+        <div id="next-round">
+            <h1>¡OBJETIVO LOGRADO!</h1>
+            <p>Siguiente Ronda...</p>
+            <button onclick="continueToNextRound()">SIGUIENTE RONDA</button>
+        </div>
+    </div>
+
+    <script src="js/script.js" defer></script>
+</body>
+
+</html>
