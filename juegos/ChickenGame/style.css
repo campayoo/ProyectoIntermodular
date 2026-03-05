@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #0d1117;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+}
+
+#wrapper {
+    position: relative;
+    width: 600px;
+    height: 700px;
+}
+
+/* HUD */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 18px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    border-bottom: 2px solid rgba(255, 200, 50, 0.25);
+    z-index: 5;
+    pointer-events: none;
+}
+
+#hud span {
+    color: #ccc;
+    font-size: 15px;
+}
+
+#hud strong {
+    color: #ffe44d;
+    font-size: 17px;
+}
+
+#gameCanvas {
+    display: block;
+    width: 600px;
+    height: 700px;
+}
+
+/* ---- Overlays ---- */
+.overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(5, 8, 18, 0.87);
+    backdrop-filter: blur(7px);
+    z-index: 20;
+    border-radius: 10px;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.card {
+    background: linear-gradient(145deg, #1c2a40, #0f1a2e);
+    border: 2px solid rgba(255, 200, 50, 0.35);
+    border-radius: 20px;
+    padding: 38px 48px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 0 60px rgba(255, 180, 0, 0.12), 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.big-emoji {
+    font-size: 64px;
+    margin-bottom: 10px;
+}
+
+.anim-bounce {
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+h1 {
+    color: #ffe44d;
+    font-size: 32px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(255, 210, 0, 0.45);
+}
+
+.sub {
+    color: #8aa0b8;
+    font-size: 13px;
+    margin-bottom: 22px;
+    line-height: 1.6;
+}
+
+.rules {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 26px;
+    text-align: left;
+}
+
+.rule {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #b0c8e0;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.rule:last-child {
+    margin-bottom: 0;
+}
+
+.key {
+    background: rgba(255, 220, 50, 0.12);
+    border: 1px solid rgba(255, 220, 50, 0.35);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #ffe44d;
+    white-space: nowrap;
+}
+
+.icon {
+    font-size: 17px;
+}
+
+.btn {
+    background: linear-gradient(135deg, #f5c518, #e8a000);
+    color: #1a0a00;
+    border: none;
+    border-radius: 50px;
+    padding: 13px 38px;
+    font-size: 17px;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(245, 197, 24, 0.35);
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 28px rgba(245, 197, 24, 0.55);
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.final {
+    color: #8aa0b8;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.final strong {
+    color: #ffe44d;
+    font-size: 19px;
+}
