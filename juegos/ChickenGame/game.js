@@ -27,20 +27,20 @@ document.getElementById('btn-next').addEventListener('click', nextLevel);
 // ============================================================
 //  LAYOUT CONSTANTS
 // ============================================================
-const HUD_H = 36;   // pixels reserved for HUD at top
+const HUD_H = 50;   // pixels reserved for HUD at top
 const SAFE_TOP = HUD_H + 10;
 const SAFE_BOT = H - 10;
-const ROAD_TOP = HUD_H + 80;
-const ROAD_BOT = H - 80;
-const ROAD_H = ROAD_BOT - ROAD_TOP;
+const ROAD_TOP = 172;        // Adjusted to move lanes slightly lower
+const ROAD_BOT = 620;        // Keeps bottom road edge steady
+const ROAD_H = ROAD_BOT - ROAD_TOP; // 448px
 
 const LANE_COUNT = 4;
-const LANE_H = ROAD_H / LANE_COUNT;
+const LANE_H = ROAD_H / LANE_COUNT; // 112px
 
 // Chicken constants
 const CHICK_W = 36, CHICK_H = 36;
 const CHICK_START_X = W / 2;
-const CHICK_START_Y = ROAD_BOT + 30;
+const CHICK_START_Y = ROAD_BOT + LANE_H / 2 - 2; // 674px - centered higher in grass to prevent feet clipping
 const CHICK_MOVE_DIST = LANE_H;   // one lane per move
 const CHICK_MOVE_SPEED = 5.5;     // Balanced responsiveness
 
@@ -169,15 +169,16 @@ function startMove(dir) {
     chicken.targetY = chicken.y;
 
     if (dir === 'left' || dir === 'right') {
-        const step = dir === 'left' ? -LANE_H / 2 : LANE_H / 2;
-        const newX = chicken.x + step;
-        if (newX < 30 || newX > W - 30) return;
+        const step = LANE_H / 2;
+        const newX = dir === 'left' ? chicken.x - step : chicken.x + step;
+        if (newX < 20 || newX > W - 20) return;
         chicken.targetX = newX;
         chicken.facing = dir === 'left' ? -1 : 1;
     } else {
         const step = dir === 'up' ? -LANE_H : LANE_H;
         const newY = chicken.y + step;
-        if (newY < ROAD_TOP - LANE_H) return;
+        // Limit movement to avoid going out of top bounds
+        if (newY < HUD_H) return;
         if (newY > CHICK_START_Y + 5) return;
         chicken.targetY = newY;
     }
@@ -543,20 +544,22 @@ function checkCollisions() {
 
     const cx = chicken.x;
     const cy = chicken.y;
-    const cw = CHICK_W * 0.75; // Tighter, more realistic hitbox
-    const ch = CHICK_H * 0.75;
+    const cr = 14; // Circle radius for chicken hitbox
 
     for (const lane of lanes) {
         for (const v of lane.vehicles) {
+            // Rectangular hitbox for vehicles
             const vLeft = v.x - v.w / 2;
             const vRight = v.x + v.w / 2;
             const vTop = v.y - v.h / 2;
             const vBot = v.y + v.h / 2;
 
-            if (
-                cx + cw > vLeft && cx - cw < vRight &&
-                cy + ch > vTop && cy - ch < vBot
-            ) {
+            // Simple point-in-rect or circle-rect intersection
+            const closestX = Math.max(vLeft, Math.min(cx, vRight));
+            const closestY = Math.max(vTop, Math.min(cy, vBot));
+            const distance = Math.sqrt((cx - closestX) ** 2 + (cy - closestY) ** 2);
+
+            if (distance < cr) {
                 killChicken(v);
                 return;
             }
@@ -587,7 +590,7 @@ function killChicken(v) {
             chicken.moving = false;
             chicken.stepsTaken = 0;
         }
-    }, 900);
+    }, 400);
 }
 
 function onChickenSafe() {
