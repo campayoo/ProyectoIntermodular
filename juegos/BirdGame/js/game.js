@@ -161,8 +161,8 @@ function init(resetLevel = true) {
     bird = new Bird();
     obstacles = [];
     frames = 0;
-    gameSpeed = 6 + (level * 1.5); // Increase base speed per level
-    obstacleFrequency = Math.max(15, 60 - (level * 5)); // Increase frequency per level (min 15 frames)
+    gameSpeed = 4 + (level * 1.0); // Much slower start (was 7.5+)
+    obstacleFrequency = Math.max(25, 120 - (level * 10)); // Much rarer obstacles (was ~60)
     isGameOver = false;
     isLevelTransition = false;
 
@@ -240,8 +240,8 @@ function animate(currentTime) {
         const obs1 = new Obstacle(y1);
         obstacles.push(obs1);
 
-        // Chance to spawn second increases slightly per level
-        const chanceForSecond = Math.min(0.8, 0.3 + (level * 0.05));
+        // Chance to spawn second increases slightly per level, very low at start
+        const chanceForSecond = Math.min(0.8, 0.1 + (level * 0.05));
 
         if (Math.random() < chanceForSecond && availableZones.length > 0) {
 
@@ -262,13 +262,28 @@ function animate(currentTime) {
     obstacles.forEach((obstacle, index) => {
         obstacle.update();
 
-        // Collision Detection (Simple AABB with slight padding for emoji transparency)
-        const padding = 10;
+        // Collision Detection (Generous Hitboxes)
+        // Bird hitbox is roughly the center 40% of its area
+        const birdHB = {
+            x: bird.x + bird.width * 0.3,
+            y: bird.y + bird.height * 0.3,
+            w: bird.width * 0.4,
+            h: bird.height * 0.4
+        };
+
+        // Obstacle hitbox is the center 60% of its area
+        const obsHB = {
+            x: obstacle.x + obstacle.width * 0.2,
+            y: obstacle.y + obstacle.height * 0.2,
+            w: obstacle.width * 0.6,
+            h: obstacle.height * 0.6
+        };
+
         if (
-            bird.x < obstacle.x + obstacle.width - padding &&
-            bird.x + bird.width - padding > obstacle.x &&
-            bird.y < obstacle.y + obstacle.height - padding &&
-            bird.y + bird.height - padding > obstacle.y
+            birdHB.x < obsHB.x + obsHB.w &&
+            birdHB.x + birdHB.w > obsHB.x &&
+            birdHB.y < obsHB.y + obsHB.h &&
+            birdHB.y + birdHB.h > obsHB.y
         ) {
             gameOver();
         }
