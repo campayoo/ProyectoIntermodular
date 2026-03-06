@@ -234,49 +234,51 @@
                         MISIÓN</button>
                 </div>
 
-                <!-- Slot 05: ODS 1 (Locked - juego5) -->
+                <!-- Slot 05: Sky Dodger (Active) -->
                 <div
-                    class="grid-slot locked bg-cyber-panel/20 border border-cyber-border rounded-xl p-6 relative group grayscale opacity-60">
-                    <div class="lock-overlay"><span class="text-4xl">🔒</span></div>
-                    <div class="security-tape">CONSTRUCTION IN PROGRESS</div>
-                    <div class="security-tape security-tape-bottom">CONSTRUCTION IN PROGRESS</div>
-                    <div class="absolute top-0 right-0 p-4 opacity-10"><span class="text-6xl icon-placeholder">🏠</span>
-                    </div>
+                    class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-cyan-500/30">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity"><span
+                            class="text-6xl">🐦</span></div>
                     <div class="flex items-center gap-3 mb-4">
                         <span
-                            class="px-2 py-0.5 bg-gray-700 text-gray-400 text-[10px] font-bold rounded uppercase">LOCKED</span>
-                        <span class="text-gray-600 text-[10px] font-bold ods-label">ODS 1: FIN DE LA POBREZA</span>
+                            class="px-2 py-0.5 bg-cyan-500 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
+                        <span class="text-gray-500 text-[10px] font-bold">SKY DODGER</span>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2 text-gray-500 title-placeholder tracking-tighter">No Poverty</h3>
-                    <p class="text-gray-600 text-sm mb-6 italic">Esta misión se encuentra actualmente en fase de
-                        despliegue estratégico por el equipo GAIA.</p>
+                    <h3 class="text-2xl font-bold mb-2">Sky Dodger</h3>
+                    <p class="text-gray-400 text-sm mb-6">Navega por los cielos y evita obstáculos para asegurar la
+                        seguridad aérea.</p>
                     <div
-                        class="w-full h-12 bg-gray-800/30 rounded-lg flex items-center justify-center border border-dashed border-gray-700">
-                        <span class="text-[10px] text-gray-700 font-bold tracking-widest uppercase">Próximamente</span>
+                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                        <span class="text-cyan-500 font-bold mono" id="record-birdgame">0000</span>
                     </div>
+                    <button onclick="openGame('juegos/BirdGame/index.html')"
+                        class="w-full py-4 bg-cyan-500 hover:bg-cyan-500/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
+                        MISIÓN</button>
                 </div>
 
-                <!-- Slot 06: ODS 2 (Locked - juego6) -->
+                <!-- Slot 06: ChickenCrossing (Active - ODS 15) -->
                 <div
-                    class="grid-slot locked bg-cyber-panel/20 border border-cyber-border rounded-xl p-6 relative group grayscale opacity-60">
-                    <div class="lock-overlay"><span class="text-4xl">🔒</span></div>
-                    <div class="security-tape">CONSTRUCTION IN PROGRESS</div>
-                    <div class="security-tape security-tape-bottom">CONSTRUCTION IN PROGRESS</div>
-                    <div class="absolute top-0 right-0 p-4 opacity-10"><span class="text-6xl icon-placeholder">🌾</span>
+                    class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods15/30">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                        <span class="text-6xl">🐔</span>
                     </div>
                     <div class="flex items-center gap-3 mb-4">
                         <span
-                            class="px-2 py-0.5 bg-gray-700 text-gray-400 text-[10px] font-bold rounded uppercase">LOCKED</span>
-                        <span class="text-gray-600 text-[10px] font-bold ods-label">ODS 2: HAMBRE CERO</span>
+                            class="px-2 py-0.5 bg-ods15 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
+                        <span class="text-gray-500 text-[10px] font-bold">ODS 15: VIDA TERRESTRE</span>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2 text-gray-500 title-placeholder tracking-tighter">Crop Harvest
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-6 italic">Esta misión se encuentra actualmente en fase de
-                        despliegue estratégico por el equipo GAIA.</p>
+                    <h3 class="text-2xl font-bold mb-2">Chicken Crossing</h3>
+                    <p class="text-gray-400 text-sm mb-6">Ayuda a la gallina a cruzar carreteras mientras proteges
+                        hábitats y la biodiversidad terrestre.</p>
                     <div
-                        class="w-full h-12 bg-gray-800/30 rounded-lg flex items-center justify-center border border-dashed border-gray-700">
-                        <span class="text-[10px] text-gray-700 font-bold tracking-widest uppercase">Próximamente</span>
+                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                        <span class="text-ods15 font-bold mono" id="record-chickencrossing">0000</span>
                     </div>
+                    <button onclick="openGame('juegos/ChickenGame/index.html')"
+                        class="w-full py-4 bg-ods15 hover:bg-ods15/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
+                        MISIÓN</button>
                 </div>
 
                 <!-- Fila 3: XX- (Juegos 7, 8, 9) -->
