@@ -80,9 +80,8 @@ class Bird {
         this.velocity += GRAVITY;
         this.y += this.velocity;
 
-        // Floor collision
-        if (this.y + this.height > canvas.height) {
-            this.y = canvas.height - this.height;
+        // Floor collision (Game over ONLY when completely off-screen)
+        if (this.y > canvas.height) {
             this.velocity = 0;
             gameOver();
         }
