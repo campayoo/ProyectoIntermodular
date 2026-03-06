@@ -134,135 +134,60 @@
                 <div>
                     <h2 class="text-3xl font-bold tracking-tight uppercase">Archivo de Misiones</h2>
                     <p class="text-sm text-gray-500 uppercase tracking-widest">Base de datos ODS v1.0.4</p>
+                    <div class="text-[10px] text-gray-500 mono">DEPLOYED_MODULES: 04/09</div>
                 </div>
-                <div class="text-[10px] text-gray-500 mono">DEPLOYED_MODULES: 04/09</div>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="grid-container">
-                <!-- Slot 00: ODS 14 (Active) -->
-                <div
-                    class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods14/30">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
-                        <span class="text-6xl">🌊</span>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <span
-                            class="px-2 py-0.5 bg-ods14 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
-                        <span class="text-gray-500 text-[10px] font-bold">ODS 14: VIDA SUBMARINA</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Plastic Fisher</h3>
-                    <p class="text-gray-400 text-sm mb-6">Limpia los océanos de plásticos para salvar la vida marina.
-                        Micro-sesión de 8 segundos.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="grid-container">
+                    <!-- Slot 00: ODS 14 (Active) -->
                     <div
-                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
-                        <span class="text-ods14 font-bold mono" id="record-ods14">0000</span>
+                        class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods14/30">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                            <span class="text-6xl">🌊</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="px-2 py-0.5 bg-ods14 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
+                            <span class="text-gray-500 text-[10px] font-bold">ODS 14: VIDA SUBMARINA</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Plastic Fisher</h3>
+                        <p class="text-gray-400 text-sm mb-6">Limpia los océanos de plásticos para salvar la vida
+                            marina.
+                            Micro-sesión de 8 segundos.</p>
+                        <div
+                            class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                            <span class="text-ods14 font-bold mono" id="record-ods14">0000</span>
+                        </div>
+                        <button onclick="openGame('juegos/juego1/index.html')"
+                            class="w-full py-4 bg-ods14 hover:bg-ods14/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
+                            MISIÓN</button>
                     </div>
-                    <button onclick="openGame('juegos/juego1/index.html')"
-                        class="w-full py-4 bg-ods14 hover:bg-ods14/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
-                        MISIÓN</button>
-                </div>
 
-                <!-- Slot 01: ODS 6 (Active) -->
-                <div
-                    class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods6/30">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
-                        <span class="text-6xl">💧</span>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <span
-                            class="px-2 py-0.5 bg-ods6 text-black text-[10px] font-extrabold rounded uppercase">READY</span>
-                        <span class="text-gray-500 text-[10px] font-bold">ODS 6: AGUA LIMPIA</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Rain Collector</h3>
-                    <p class="text-gray-400 text-sm mb-6">Recoge cada gota para asegurar el suministro vital.
-                        Micro-sesión de 8 segundos.</p>
+                    <!-- Slot 01: ODS 6 (Active) -->
                     <div
-                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
-                        <span class="text-ods6 font-bold mono" id="record-ods6">0000</span>
+                        class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods6/30">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                            <span class="text-6xl">💧</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="px-2 py-0.5 bg-ods6 text-black text-[10px] font-extrabold rounded uppercase">READY</span>
+                            <span class="text-gray-500 text-[10px] font-bold">ODS 6: AGUA LIMPIA</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Rain Collector</h3>
+                        <p class="text-gray-400 text-sm mb-6">Recoge cada gota para asegurar el suministro vital.
+                            Micro-sesión de 8 segundos.</p>
+                        <div
+                            class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                            <span class="text-ods6 font-bold mono" id="record-ods6">0000</span>
+                        </div>
+                        <button onclick="openGame('juegos/juego6/placeholder.html')"
+                            class="w-full py-4 bg-ods6 hover:bg-ods6/80 text-black font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
+                            MISIÓN</button>
                     </div>
-                    <button onclick="openGame('juegos/juego6/placeholder.html')"
-                        class="w-full py-4 bg-ods6 hover:bg-ods6/80 text-black font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
-                        MISIÓN</button>
-                </div>
 
-                <!-- Slot 02: ODS 1 (Locked Placeholder) -->
-                <div
-                    class="grid-slot locked bg-cyber-panel/20 border border-cyber-border rounded-xl p-6 relative group grayscale opacity-60">
-                    <div class="lock-overlay">
-                        <span class="text-4xl">🔒</span>
-                    </div>
-                    <div class="security-tape">CONSTRUCTION IN PROGRESS</div>
-                    <div class="security-tape security-tape-bottom">CONSTRUCTION IN PROGRESS</div>
-
-                    <div class="absolute top-0 right-0 p-4 opacity-10">
-                        <span class="text-6xl icon-placeholder">🏠</span>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <span
-                            class="px-2 py-0.5 bg-gray-700 text-gray-400 text-[10px] font-bold rounded uppercase">LOCKED</span>
-                        <span class="text-gray-600 text-[10px] font-bold">ODS 1: FIN DE LA POBREZA</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2 text-gray-500 tracking-tighter">No Poverty</h3>
-                    <p class="text-gray-600 text-sm mb-6 italic">Esta misión se encuentra actualmente en fase de
-                        despliegue estratégico por el equipo GAIA.</p>
-
-                    <div
-                        class="w-full h-12 bg-gray-800/30 rounded-lg flex items-center justify-center border border-dashed border-gray-700">
-                        <span class="text-[10px] text-gray-700 font-bold tracking-widest uppercase">Próximamente</span>
-                    </div>
-                </div>
-
-                <!-- Slot 03: OceanCleanup (Active) -->
-                <div
-                    class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods14/30">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
-                        <span class="text-6xl">🐟</span>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <span
-                            class="px-2 py-0.5 bg-ods14 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
-                        <span class="text-gray-500 text-[10px] font-bold">ODS 14: VIDA SUBMARINA</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Ocean Cleanup</h3>
-                    <p class="text-gray-400 text-sm mb-6">Elimina los residuos plásticos y protege la fauna marina en
-                        peligro.</p>
-                    <div
-                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
-                        <span class="text-ods14 font-bold mono" id="record-oceancleanup">0000</span>
-                    </div>
-                    <button onclick="openGame('juegos/OceanCleanup/index.html')"
-                        class="w-full py-4 bg-ods14 hover:bg-ods14/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
-                        MISIÓN</button>
-                </div>
-
-                <!-- Slot 04: SkyDodger (Active) -->
-                <div
-                    class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods15/30">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
-                        <span class="text-6xl">🐦</span>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <span
-                            class="px-2 py-0.5 bg-ods15 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
-                        <span class="text-gray-500 text-[10px] font-bold">ODS 11: CIUDADES Y COMUNIDADES SOSTENIBLES</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Sky Dodger</h3>
-                    <p class="text-gray-400 text-sm mb-6">Esquiva águilas y aviones mientras equilibras el cielo con la expansión urbana</p>
-                    <div
-                        class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
-                        <span class="text-ods15 font-bold mono" id="record-skydodger">0000</span>
-                    </div>
-                    <button onclick="openGame('juegos/BirdGame/index.html')"
-                        class="w-full py-4 bg-ods15 hover:bg-ods15/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
-                        MISIÓN</button>
-                </div>
-
-                <!-- Template for Construction Slots -->
-                <template id="construction-slot-template">
+                    <!-- Slot 02: ODS 1 (Locked Placeholder) -->
                     <div
                         class="grid-slot locked bg-cyber-panel/20 border border-cyber-border rounded-xl p-6 relative group grayscale opacity-60">
                         <div class="lock-overlay">
@@ -272,15 +197,14 @@
                         <div class="security-tape security-tape-bottom">CONSTRUCTION IN PROGRESS</div>
 
                         <div class="absolute top-0 right-0 p-4 opacity-10">
-                            <span class="text-6xl icon-placeholder">?</span>
+                            <span class="text-6xl icon-placeholder">🏠</span>
                         </div>
                         <div class="flex items-center gap-3 mb-4">
                             <span
                                 class="px-2 py-0.5 bg-gray-700 text-gray-400 text-[10px] font-bold rounded uppercase">LOCKED</span>
-                            <span class="text-gray-600 text-[10px] ods-label font-bold">ODS ??: ---</span>
+                            <span class="text-gray-600 text-[10px] font-bold">ODS 1: FIN DE LA POBREZA</span>
                         </div>
-                        <h3 class="text-2xl font-bold mb-2 text-gray-500 title-placeholder tracking-tighter">Mission
-                            Name</h3>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-500 tracking-tighter">No Poverty</h3>
                         <p class="text-gray-600 text-sm mb-6 italic">Esta misión se encuentra actualmente en fase de
                             despliegue estratégico por el equipo GAIA.</p>
 
@@ -290,32 +214,111 @@
                                 class="text-[10px] text-gray-700 font-bold tracking-widest uppercase">Próximamente</span>
                         </div>
                     </div>
-                </template>
 
-                <!-- Script to populate grid slots -->
-                <script>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        const grid = document.getElementById('grid-container');
-                        const template = document.getElementById('construction-slot-template');
-                        const constructionData = [
-                            { ods: 1, name: 'No Poverty', icon: '🏠', label: 'Fin de la Pobreza' },
-                            { ods: 15, name: 'Fast Reforest', icon: '🌲', label: 'Ecosistemas Terrestres' },
-                            { ods: 12, name: 'Trash Sorter', icon: '♻️', label: 'Consumo Responsable' },
-                            { ods: 13, name: 'CO2 Filter', icon: '☁️', label: 'Acción por el Clima' },
-                            { ods: 2, name: 'Crop Harvest', icon: '🌾', label: 'Hambre Cero' },
-                            { ods: 11, name: 'Bike Path', icon: '🚲', label: 'Ciudades Sostenibles' }
-                        ];
+                    <!-- Slot 03: OceanCleanup (Active) -->
+                    <div
+                        class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods14/30">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                            <span class="text-6xl">🐟</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="px-2 py-0.5 bg-ods14 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
+                            <span class="text-gray-500 text-[10px] font-bold">ODS 14: VIDA SUBMARINA</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Ocean Cleanup</h3>
+                        <p class="text-gray-400 text-sm mb-6">Elimina los residuos plásticos y protege la fauna marina
+                            en
+                            peligro.</p>
+                        <div
+                            class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                            <span class="text-ods14 font-bold mono" id="record-oceancleanup">0000</span>
+                        </div>
+                        <button onclick="openGame('juegos/OceanCleanup/index.html')"
+                            class="w-full py-4 bg-ods14 hover:bg-ods14/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
+                            MISIÓN</button>
+                    </div>
 
-                        constructionData.forEach(data => {
-                            const clone = template.content.cloneNode(true);
-                            clone.querySelector('.title-placeholder').textContent = data.name;
-                            clone.querySelector('.icon-placeholder').textContent = data.icon;
-                            clone.querySelector('.ods-label').textContent = `ODS ${data.ods}: ${data.label.toUpperCase()}`;
-                            grid.appendChild(clone);
+                    <!-- Slot 04: SkyDodger (Active) -->
+                    <div
+                        class="grid-slot bg-cyber-panel border border-cyber-border rounded-xl p-6 relative group border-ods15/30">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                            <span class="text-6xl">🐦</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span
+                                class="px-2 py-0.5 bg-ods15 text-white text-[10px] font-extrabold rounded uppercase">READY</span>
+                            <span class="text-gray-500 text-[10px] font-bold">ODS 11: CIUDADES Y COMUNIDADES
+                                SOSTENIBLES</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Sky Dodger</h3>
+                        <p class="text-gray-400 text-sm mb-6">Esquiva águilas y aviones mientras equilibras el cielo con
+                            la expansión urbana</p>
+                        <div
+                            class="flex justify-between items-center bg-black/40 p-4 rounded-lg mb-6 border border-cyber-border/50">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Puntuación Record</span>
+                            <span class="text-ods15 font-bold mono" id="record-skydodger">0000</span>
+                        </div>
+                        <button onclick="openGame('juegos/BirdGame/index.html')"
+                            class="w-full py-4 bg-ods15 hover:bg-ods15/80 text-white font-bold rounded-lg transition-all uppercase tracking-tighter text-sm transform active:scale-95 shadow-lg">EJECUTAR
+                            MISIÓN</button>
+                    </div>
+
+                    <!-- Template for Construction Slots -->
+                    <template id="construction-slot-template">
+                        <div
+                            class="grid-slot locked bg-cyber-panel/20 border border-cyber-border rounded-xl p-6 relative group grayscale opacity-60">
+                            <div class="lock-overlay">
+                                <span class="text-4xl">🔒</span>
+                            </div>
+                            <div class="security-tape">CONSTRUCTION IN PROGRESS</div>
+                            <div class="security-tape security-tape-bottom">CONSTRUCTION IN PROGRESS</div>
+
+                            <div class="absolute top-0 right-0 p-4 opacity-10">
+                                <span class="text-6xl icon-placeholder">?</span>
+                            </div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <span
+                                    class="px-2 py-0.5 bg-gray-700 text-gray-400 text-[10px] font-bold rounded uppercase">LOCKED</span>
+                                <span class="text-gray-600 text-[10px] ods-label font-bold">ODS ??: ---</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2 text-gray-500 title-placeholder tracking-tighter">Mission
+                                Name</h3>
+                            <p class="text-gray-600 text-sm mb-6 italic">Esta misión se encuentra actualmente en fase de
+                                despliegue estratégico por el equipo GAIA.</p>
+
+                            <div
+                                class="w-full h-12 bg-gray-800/30 rounded-lg flex items-center justify-center border border-dashed border-gray-700">
+                                <span
+                                    class="text-[10px] text-gray-700 font-bold tracking-widest uppercase">Próximamente</span>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Script to populate grid slots -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const grid = document.getElementById('grid-container');
+                            const template = document.getElementById('construction-slot-template');
+                            const constructionData = [
+                                { ods: 1, name: 'No Poverty', icon: '🏠', label: 'Fin de la Pobreza' },
+                                { ods: 15, name: 'Fast Reforest', icon: '🌲', label: 'Ecosistemas Terrestres' },
+                                { ods: 12, name: 'Trash Sorter', icon: '♻️', label: 'Consumo Responsable' },
+                                { ods: 13, name: 'CO2 Filter', icon: '☁️', label: 'Acción por el Clima' },
+                                { ods: 2, name: 'Crop Harvest', icon: '🌾', label: 'Hambre Cero' },
+                                { ods: 11, name: 'Bike Path', icon: '🚲', label: 'Ciudades Sostenibles' }
+                            ];
+                            constructionData.forEach(data => {
+                                const clone = template.content.cloneNode(true);
+                                clone.querySelector('.title-placeholder').textContent = data.name;
+                                clone.querySelector('.icon-placeholder').textContent = data.icon;
+                                clone.querySelector('.ods-label').textContent = `ODS ${data.ods}: ${data.label.toUpperCase()}`;
+                                grid.appendChild(clone);
+                            });
                         });
-                    });
-                </script>
-            </div>
+                    </script>
+                </div>
         </section>
 
         <!-- Log de Sistema / Diario de Desarrollo -->

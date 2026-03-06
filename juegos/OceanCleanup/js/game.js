@@ -28,9 +28,13 @@ const splashText = document.getElementById('splash-text');
 // ── Canvas size ───────────────────────────────────────────
 function resizeCanvas() {
     const wrapper = document.getElementById('game-wrapper');
+    if (!wrapper) return;
     canvas.width = wrapper.clientWidth;
     canvas.height = wrapper.clientHeight;
 }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 // ── Constants ─────────────────────────────────────────────
@@ -210,9 +214,9 @@ function createEntity() {
     // Spawn from left or right edge, travel across
     const fromLeft = Math.random() < 0.5;
     const y = rand(HUD_HEIGHT + 40, H - 40);
-    const baseSpeed = rand(2.2, 4.5);
-    // Cap speed multiplier at 4x to keep it playable
-    const speedMult = Math.min(4, 1 + (currentLevel - 1) * 0.10);
+    const baseSpeed = rand(1.5, 3.5); // Slower initial speed
+    // More gradual speed multiplier
+    const speedMult = Math.min(4, 1 + (currentLevel - 1) * 0.08);
     const speed = baseSpeed * speedMult;
 
     return {
@@ -237,11 +241,11 @@ function createEntity() {
 function spawnEntity() {
     if (!running) return;
     entities.push(createEntity());
-    // Vary spawn interval: faster as time runs out
+    // Vary spawn interval: slower start, slower scaling
     const elapsed = GAME_DURATION - timeLeft;
-    const baseInterval = Math.max(400, 1000 - elapsed * 40);
-    // Cap spawn frequency at 100ms (insane)
-    const interval = Math.max(100, baseInterval / (1 + (currentLevel - 1) * 0.08));
+    const baseInterval = Math.max(600, 1200 - elapsed * 30); // Slower initial spawn
+    // Cap spawn frequency at 150ms 
+    const interval = Math.max(150, baseInterval / (1 + (currentLevel - 1) * 0.06));
     spawnTimer = setTimeout(spawnEntity, interval);
 }
 
