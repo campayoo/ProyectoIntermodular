@@ -293,13 +293,13 @@ function animate(currentTime) {
             };
             collision = checkCollision(birdHB, fuselage) || checkCollision(birdHB, wings);
         } else {
-            // Eagle shape: Main body and wing span
-            // Adjusted: Smaller top-front, significantly expanded bottom for wings and belly
+            // Eagle shape: Main body and wing span (Expanded)
+            // Bottom-left diagonal refined: Another 5% smaller (total 10% shift)
             const eagleHB = {
-                x: obstacle.x + obstacle.width * 0.2,
-                y: obstacle.y + obstacle.height * 0.3,
+                x: obstacle.x + obstacle.width * 0.20,
+                y: obstacle.y + obstacle.height * 0.25,
                 w: obstacle.width * 0.78,
-                h: obstacle.height * 0.93 // Taller by 35% of total height (was 0.58)
+                h: obstacle.height * 0.83 // another 5% smaller than the previous 0.88
             };
             collision = checkCollision(birdHB, eagleHB);
         }
