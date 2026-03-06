@@ -261,21 +261,21 @@ function animate(currentTime) {
     obstacles.forEach((obstacle, index) => {
         obstacle.update();
 
-        // Collision Detection (Generous Hitboxes)
-        // Bird hitbox is roughly the center 40% of its area
+        // Collision Detection (Generous but accurate for wings)
+        // Bird hitbox is roughly the center 60% of its area (was 40)
         const birdHB = {
-            x: bird.x + bird.width * 0.3,
-            y: bird.y + bird.height * 0.3,
-            w: bird.width * 0.4,
-            h: bird.height * 0.4
+            x: bird.x + bird.width * 0.2,
+            y: bird.y + bird.height * 0.2,
+            w: bird.width * 0.6,
+            h: bird.height * 0.6
         };
 
-        // Obstacle hitbox is the center 60% of its area
+        // Obstacle hitbox covers 85% width and 70% height to catch wings
         const obsHB = {
-            x: obstacle.x + obstacle.width * 0.2,
-            y: obstacle.y + obstacle.height * 0.2,
-            w: obstacle.width * 0.6,
-            h: obstacle.height * 0.6
+            x: obstacle.x + obstacle.width * 0.075,
+            y: obstacle.y + obstacle.height * 0.15,
+            w: obstacle.width * 0.85,
+            h: obstacle.height * 0.7
         };
 
         if (
