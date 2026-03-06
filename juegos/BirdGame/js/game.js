@@ -280,25 +280,26 @@ function animate(currentTime) {
         if (obstacle.type === 'plane') {
             // Plane has a cross shape: Fuselage and Wings
             const fuselage = {
-                x: obstacle.x + obstacle.width * 0.05,
+                x: obstacle.x + obstacle.width * 0.1,
                 y: obstacle.y + obstacle.height * 0.35,
-                w: obstacle.width * 0.9,
+                w: obstacle.width * 0.8,
                 h: obstacle.height * 0.3
             };
             const wings = {
                 x: obstacle.x + obstacle.width * 0.25,
-                y: obstacle.y + obstacle.height * 0.02,
+                y: obstacle.y + obstacle.height * 0.05,
                 w: obstacle.width * 0.5,
-                h: obstacle.height * 0.96
+                h: obstacle.height * 0.9
             };
             collision = checkCollision(birdHB, fuselage) || checkCollision(birdHB, wings);
         } else {
-            // Eagle shape: Main body and wing span (Expanded)
+            // Eagle shape: Main body and wing span
+            // Adjusted: Smaller top-front (x, y shifted), slightly larger bottom-back
             const eagleHB = {
-                x: obstacle.x + obstacle.width * 0.1,
-                y: obstacle.y + obstacle.height * 0.25,
-                w: obstacle.width * 0.88,
-                h: obstacle.height * 0.73
+                x: obstacle.x + obstacle.width * 0.2,
+                y: obstacle.y + obstacle.height * 0.3,
+                w: obstacle.width * 0.78,
+                h: obstacle.height * 0.58
             };
             collision = checkCollision(birdHB, eagleHB);
         }
