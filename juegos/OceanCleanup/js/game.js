@@ -34,8 +34,6 @@ function resizeCanvas() {
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 // ── Constants ─────────────────────────────────────────────
 const FISH_LIMIT = 5;   // max fish clicks before lose
