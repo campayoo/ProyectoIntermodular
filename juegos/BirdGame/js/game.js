@@ -31,9 +31,16 @@ const GRAVITY = 0.25;
 const JUMP = 4.6;
 
 // Resize canvas to fill window
+// Resize canvas based on container
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const container = document.getElementById('game-container');
+    if (container) {
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+    } else {
+        canvas.width = 900;
+        canvas.height = 620;
+    }
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
