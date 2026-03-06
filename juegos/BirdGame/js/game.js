@@ -261,29 +261,49 @@ function animate(currentTime) {
     obstacles.forEach((obstacle, index) => {
         obstacle.update();
 
-        // Collision Detection (Generous but accurate for wings)
-        // Bird hitbox is roughly the center 60% of its area (was 40)
+        // Collision Detection (Shape-specific hitboxes)
         const birdHB = {
-            x: bird.x + bird.width * 0.2,
-            y: bird.y + bird.height * 0.2,
-            w: bird.width * 0.6,
-            h: bird.height * 0.6
+            x: bird.x + bird.width * 0.25,
+            y: bird.y + bird.height * 0.25,
+            w: bird.width * 0.5,
+            h: bird.height * 0.5
         };
 
-        // Obstacle hitbox covers 85% width and 70% height to catch wings
-        const obsHB = {
-            x: obstacle.x + obstacle.width * 0.075,
-            y: obstacle.y + obstacle.height * 0.15,
-            w: obstacle.width * 0.85,
-            h: obstacle.height * 0.7
+        const checkCollision = (r1, r2) => {
+            return r1.x < r2.x + r2.w &&
+                r1.x + r1.w > r2.x &&
+                r1.y < r2.y + r2.h &&
+                r1.y + r1.h > r2.y;
         };
 
-        if (
-            birdHB.x < obsHB.x + obsHB.w &&
-            birdHB.x + birdHB.w > obsHB.x &&
-            birdHB.y < obsHB.y + obsHB.h &&
-            birdHB.y + birdHB.h > obsHB.y
-        ) {
+        let collision = false;
+        if (obstacle.type === 'plane') {
+            // Plane has a cross shape: Fuselage and Wings
+            const fuselage = {
+                x: obstacle.x + obstacle.width * 0.1,
+                y: obstacle.y + obstacle.height * 0.35,
+                w: obstacle.width * 0.8,
+                h: obstacle.height * 0.3
+            };
+            const wings = {
+                x: obstacle.x + obstacle.width * 0.35,
+                y: obstacle.y + obstacle.height * 0.1,
+                w: obstacle.width * 0.3,
+                h: obstacle.height * 0.8
+            };
+            collision = checkCollision(birdHB, fuselage) || checkCollision(birdHB, wings);
+        } else {
+            // Eagle shape: Main body and wing span
+            const eagleHB = {
+                x: obstacle.x + obstacle.width * 0.1,
+                y: obstacle.y + obstacle.height * 0.2,
+                w: obstacle.width * 0.8,
+                h: obstacle.height * 0.6
+            };
+            collision = checkCollision(birdHB, eagleHB);
+        }
+
+        if (collision) {
             gameOver();
         }
 
