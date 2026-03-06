@@ -82,7 +82,6 @@ class Bird {
 
         // Floor collision (Game over ONLY when completely off-screen)
         if (this.y > canvas.height) {
-            this.y = canvas.height;
             this.velocity = 0;
             gameOver();
         }
@@ -295,12 +294,12 @@ function animate(currentTime) {
             collision = checkCollision(birdHB, fuselage) || checkCollision(birdHB, wings);
         } else {
             // Eagle shape: Main body and wing span (Expanded)
-            // Bottom-left diagonal refined: 5% smaller (shifted x and reduced h)
+            // Bottom-left diagonal refined: Another 5% smaller (total 10% shift)
             const eagleHB = {
-                x: obstacle.x + obstacle.width * 0.15,
+                x: obstacle.x + obstacle.width * 0.20,
                 y: obstacle.y + obstacle.height * 0.25,
-                w: eagleHBWidth = obstacle.width * 0.83, // Adjusted width to maintain right-side coverage
-                h: obstacle.height * 0.88 // 5% smaller than the previous 0.93
+                w: obstacle.width * 0.78,
+                h: obstacle.height * 0.83 // another 5% smaller than the previous 0.88
             };
             collision = checkCollision(birdHB, eagleHB);
         }
