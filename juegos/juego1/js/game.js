@@ -1,164 +1,163 @@
-const state = {
-    score: 0,
-    energy: 0,
-    lives: 4,
-    timeLeft: 5,
-    gameActive: false,
-    timerStarted: false,
-    baseEnergyPerClick: 7, // Harder: ~15 clicks needed initially
-    difficultyRate: 0.5
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const scoreSpan = document.getElementById('score');
+const livesSpan = document.getElementById('lives');
+const finalScoreSpan = document.getElementById('final-score');
+const gameOverScreen = document.getElementById('game-over');
+
+canvas.width = 800;
+canvas.height = 600;
+
+let score = 0;
+let lives = 50; // More tension
+let gameActive = true;
+let gameItems = [];
+let particles = [];
+let difficulty = 2.0; // Higher starting difficulty
+
+const player = {
+    x: 400,
+    y: 300,
+    size: 50,
+    emoji: '🚢'
 };
 
-const elements = {
-    score: document.getElementById('score'),
-    timer: document.getElementById('timer'),
-    energyBar: document.getElementById('energy-progress'),
-    percent: document.getElementById('percent'),
-    btn: document.getElementById('generate-btn'),
-    overlay: document.getElementById('message-overlay'),
-    resultText: document.getElementById('result-text'),
-    restartBtn: document.getElementById('restart-btn'),
-    parts: document.querySelectorAll('.city-part'),
-    station: document.getElementById('power-station'),
-    lives: document.querySelectorAll('.life')
+const types = {
+    trash: ['🧴', '🛍️', '🥫', '📦'],
+    marine: ['🐟', '🐢', '🐙', '🦈', '🐠']
 };
 
-let shuffledParts = [];
+class Item {
+    constructor() {
+        this.isTrash = Math.random() > 0.4;
+        this.emoji = this.isTrash
+            ? types.trash[Math.floor(Math.random() * types.trash.length)]
+            : types.marine[Math.floor(Math.random() * types.marine.length)];
 
-function shuffle(array) {
-    const arr = Array.from(array);
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[arr[j] ? j : i]] = [arr[j], arr[i]];
+        this.x = canvas.width + 50;
+        this.y = Math.random() * (canvas.height - 100) + 50;
+        this.size = this.isTrash ? 35 : 40;
+        this.speed = (3.0 + Math.random() * 4.0) * (1 + difficulty * 0.2); // Faster initial speed
+        this.waveOffset = Math.random() * Math.PI * 2;
     }
-    return arr;
+
+    update() {
+        this.x -= this.speed;
+        this.y += Math.sin(this.x * 0.05 + this.waveOffset) * 2;
+    }
+
+    draw() {
+        ctx.font = `${this.size}px serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.emoji, this.x, this.y);
+    }
 }
 
-function initGame() {
-    state.energy = 0;
-    state.timeLeft = 5;
-    state.gameActive = true;
-    state.timerStarted = false;
-    elements.overlay.classList.add('hidden');
-    elements.overlay.classList.remove('win', 'loss');
-    elements.timer.textContent = state.timeLeft;
+// Mouse sensitivity fix: direct follow
+canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    player.x = e.clientX - rect.left;
+    player.y = e.clientY - rect.top;
 
-    // Clear visuals
-    elements.parts.forEach(p => p.classList.remove('active'));
-    elements.station.classList.remove('active');
-    elements.lives.forEach(l => l.classList.remove('exploding'));
+    // Boundaries
+    if (player.x < 25) player.x = 25;
+    if (player.x > canvas.width - 25) player.x = canvas.width - 25;
+    if (player.y < 25) player.y = 25;
+    if (player.y > canvas.height - 25) player.y = canvas.height - 25;
+});
 
-    // Randomize illumination order
-    shuffledParts = shuffle(elements.parts);
-
-    updateUI();
+function spawnItems() {
+    // Faster spawn rate
+    if (gameActive && Math.random() < 0.05 + (difficulty * 0.015)) {
+        gameItems.push(new Item());
+    }
 }
 
-function startTimer() {
-    state.timerStarted = true;
-    const timerInterval = setInterval(() => {
-        if (!state.gameActive) {
-            clearInterval(timerInterval);
-            return;
+function createBubbles() {
+    const container = document.getElementById('game-container');
+    if (Math.random() < 0.1) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        const size = Math.random() * 10 + 5;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${Math.random() * 800}px`;
+        bubble.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        container.appendChild(bubble);
+        setTimeout(() => bubble.remove(), 5000);
+    }
+}
+
+function update() {
+    if (!gameActive) return;
+
+    gameItems.forEach((item, index) => {
+        item.update();
+
+        // Collision
+        const dx = item.x - player.x;
+        const dy = item.y - player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < (player.size / 2 + item.size / 2)) {
+            gameItems.splice(index, 1);
+            if (item.isTrash) {
+                score += 10;
+                scoreSpan.innerText = score;
+                // Faster difficulty scaling
+                difficulty = 2.0 + (score / 150);
+            } else {
+                lives -= 25; // Critical hit for sea life
+                livesSpan.innerText = Math.max(0, lives);
+                if (lives <= 0) gameOver();
+            }
         }
-        state.timeLeft--;
-        elements.timer.textContent = state.timeLeft;
 
-        if (state.timeLeft <= 0) {
-            endRound();
-        }
-    }, 1000);
-}
-
-function updateUI() {
-    elements.energyBar.style.width = `${state.energy}%`;
-    elements.percent.textContent = Math.floor(state.energy);
-
-    // Update lives UI
-    elements.lives.forEach((l, i) => {
-        if (i < state.lives) {
-            l.classList.remove('lost');
-        } else {
-            l.classList.add('lost');
+        // Remove off-screen
+        if (item.x < -50) {
+            gameItems.splice(index, 1);
         }
     });
 
-    // Light up parts based on energy
-    const countToLight = Math.floor((state.energy / 100) * shuffledParts.length);
-    shuffledParts.forEach((p, index) => {
-        if (index < countToLight) {
-            p.classList.add('active');
-        } else {
-            p.classList.remove('active');
-        }
-    });
-
-    // Station lights up at 100%
-    if (state.energy >= 100) {
-        elements.station.classList.add('active');
-    }
+    spawnItems();
+    createBubbles();
 }
 
-function endRound() {
-    state.gameActive = false;
-    const won = state.energy >= 99;
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    elements.overlay.classList.remove('win', 'loss');
+    // Draw player
+    ctx.font = `${player.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(player.emoji, player.x, player.y);
 
-    if (won) {
-        state.score++;
-        elements.resultText.textContent = "CIUDAD RADIANTE";
-        elements.overlay.classList.add('win');
-    } else {
-        state.lives--;
-        updateUI();
-
-        if (state.lives <= 0) {
-            elements.resultText.textContent = "GAME OVER";
-            state.score = 0; // Reset score on Game Over
-            state.lives = 4; // Reset for next time btn is clicked after overlay
-            elements.restartBtn.textContent = "Reintentar Misión";
-        } else {
-            elements.resultText.textContent = "APAGÓN TOTAL";
-            elements.restartBtn.textContent = "Siguiente Ronda";
-        }
-        elements.overlay.classList.add('loss');
-    }
-
-    elements.score.textContent = state.score;
-    // Update final score display hidden in HTML
-    const finalScore = document.getElementById('final-score-display');
-    if (finalScore) finalScore.textContent = state.score;
-
-    elements.overlay.classList.remove('hidden');
+    // Draw items
+    gameItems.forEach(item => item.draw());
 }
 
-elements.btn.addEventListener('click', () => {
-    if (!state.gameActive && !elements.overlay.classList.contains('hidden')) return;
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
 
-    if (!state.gameActive) {
-        initGame();
-        return;
-    }
+function gameOver() {
+    gameActive = false;
+    gameOverScreen.style.display = 'flex';
+    finalScoreSpan.innerText = score;
+}
 
-    if (!state.timerStarted) {
-        startTimer();
-    }
+function resetGame() {
+    score = 0;
+    lives = 50;
+    difficulty = 2.0;
+    gameItems = [];
+    scoreSpan.innerText = score;
+    livesSpan.innerText = lives;
+    gameOverScreen.style.display = 'none';
+    gameActive = true;
+}
 
-    // Increased difficulty: gain decreases with score
-    const currentGain = Math.max(3, state.baseEnergyPerClick - (state.score * state.difficultyRate));
-    state.energy = Math.min(100, state.energy + currentGain);
-    updateUI();
-
-    if (state.energy >= 100) {
-        setTimeout(endRound, 200);
-    }
-});
-
-elements.restartBtn.addEventListener('click', () => {
-    initGame();
-});
-
-// Initial Setup
-updateUI(); // Show initial lives
-state.gameActive = false; // Stay idle until btn clicked
+gameLoop();

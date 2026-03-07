@@ -20,13 +20,19 @@ const finalTrashEl = document.getElementById('final-trash');
 const penaltyPopup = document.getElementById('penalty-popup');
 const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
+const levelCountEl = document.getElementById('level-count');
+const recordCountEl = document.getElementById('record-count');
+const levelSplash = document.getElementById('level-splash');
+const splashText = document.getElementById('splash-text');
 
 // ── Canvas size ───────────────────────────────────────────
 function resizeCanvas() {
     const wrapper = document.getElementById('game-wrapper');
+    if (!wrapper) return;
     canvas.width = wrapper.clientWidth;
     canvas.height = wrapper.clientHeight;
 }
+window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 // ── Constants ─────────────────────────────────────────────
@@ -71,6 +77,8 @@ let countdownTimer = null;
 let animFrame = null;
 let particles = [];
 let bubbles = [];
+let currentLevel = 1;
+let bestLevel = parseInt(localStorage.getItem('oceanCleanup_bestLevel')) || 1;
 let waveOffset = 0;
 
 // ── Utility ───────────────────────────────────────────────
@@ -198,13 +206,16 @@ function updateDrawParticles() {
 // ── Entity creation ───────────────────────────────────────
 function createEntity() {
     const W = canvas.width, H = canvas.height;
-    const isTrash = Math.random() < 0.35; // 35% trash, 65% fish
+    const isTrash = Math.random() < 0.55; // 55% trash, 45% fish
     const type = isTrash ? pick(TRASH_TYPES) : pick(FISH_TYPES);
 
     // Spawn from left or right edge, travel across
     const fromLeft = Math.random() < 0.5;
     const y = rand(HUD_HEIGHT + 40, H - 40);
-    const speed = rand(3.5, 7.5);
+    const baseSpeed = rand(1.5, 3.5); // Slower initial speed
+    // More gradual speed multiplier
+    const speedMult = Math.min(4, 1 + (currentLevel - 1) * 0.08);
+    const speed = baseSpeed * speedMult;
 
     return {
         isTrash,
@@ -228,9 +239,11 @@ function createEntity() {
 function spawnEntity() {
     if (!running) return;
     entities.push(createEntity());
-    // Vary spawn interval: faster as time runs out
+    // Vary spawn interval: slower start, slower scaling
     const elapsed = GAME_DURATION - timeLeft;
-    const interval = Math.max(200, 700 - elapsed * 30);
+    const baseInterval = Math.max(600, 1200 - elapsed * 30); // Slower initial spawn
+    // Cap spawn frequency at 150ms 
+    const interval = Math.max(150, baseInterval / (1 + (currentLevel - 1) * 0.06));
     spawnTimer = setTimeout(spawnEntity, interval);
 }
 
@@ -273,7 +286,7 @@ function drawEntity(e) {
 function hitTest(e, cx, cy) {
     const dx = e.x - cx;
     const dy = (e.y + Math.sin(e.wobble) * 4) - cy;
-    return Math.sqrt(dx * dx + dy * dy) < e.size * 0.6;
+    return Math.sqrt(dx * dx + dy * dy) < e.size * 0.9;
 }
 
 // ── Show floating text ────────────────────────────────────
@@ -292,6 +305,21 @@ function showPopup(text, x, y, color) {
     }, 700);
 }
 
+// ── Level Splash ──────────────────────────────────────────
+function showLevelSplash(callback) {
+    splashText.textContent = `Nivel ${currentLevel}`;
+    levelSplash.classList.remove('hidden');
+    levelSplash.style.opacity = '1';
+
+    setTimeout(() => {
+        levelSplash.style.opacity = '0';
+        setTimeout(() => {
+            levelSplash.classList.add('hidden');
+            if (callback) callback();
+        }, 500);
+    }, 1200);
+}
+
 // ── Update HUD ────────────────────────────────────────────
 function updateHUD() {
     trashCountEl.textContent = trashCount;
@@ -299,6 +327,8 @@ function updateHUD() {
     escapedCountEl.textContent = escaped;
     scoreEl.textContent = score;
     timerEl.textContent = timeLeft;
+    if (levelCountEl) levelCountEl.textContent = currentLevel;
+    if (recordCountEl) recordCountEl.textContent = bestLevel;
 }
 
 // ── Check lose conditions ─────────────────────────────────
@@ -326,6 +356,18 @@ function endGame(win, message) {
     finalScoreEl.textContent = score;
     finalTrashEl.textContent = trashCount;
     endScreen.classList.remove('hidden');
+
+    if (win) {
+        if (currentLevel > bestLevel) {
+            bestLevel = currentLevel;
+            localStorage.setItem('oceanCleanup_bestLevel', bestLevel);
+        }
+        currentLevel++;
+        restartBtn.textContent = 'Siguiente Nivel';
+    } else {
+        currentLevel = 1;
+        restartBtn.textContent = 'Reintentar Nivel 1';
+    }
 }
 
 // ── Main game loop ────────────────────────────────────────
@@ -426,21 +468,26 @@ function startGame() {
     spawnBubbles();
     updateHUD();
 
-    // Countdown
-    countdownTimer = setInterval(() => {
-        if (!running) return;
-        timeLeft--;
-        timerEl.textContent = timeLeft;
-        if (timeLeft <= 0) {
-            endGame(true, `¡Tiempo agotado! Recogiste ${trashCount} basuras y salvaste el océano. 🌊`);
-        }
-    }, 1000);
+    showLevelSplash(() => {
+        // Countdown
+        countdownTimer = setInterval(() => {
+            if (!running) return;
+            switch (timeLeft) {
+                case 0:
+                    endGame(true, `¡Tiempo agotado! Recogiste ${trashCount} basuras y salvaste el océano. 🌊`);
+                    break;
+                default:
+                    timeLeft--;
+                    timerEl.textContent = timeLeft;
+            }
+        }, 1000);
 
-    // Spawn first entity after short delay
-    spawnTimer = setTimeout(spawnEntity, 500);
+        // Spawn first entity after short delay
+        spawnTimer = setTimeout(spawnEntity, 500);
 
-    // Start loop
-    gameLoop();
+        // Start loop
+        gameLoop();
+    });
 }
 
 startBtn.addEventListener('click', startGame);

@@ -67,6 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'juegos/juego8/index.html',
             'juegos/juego9/index.html'
         ]
+            'juegos/juego6/placeholder.html',
+            'juegos/OceanCleanup/index.html'
+        ] // Add more as they deploy
     };
 
     // 5. Infinite Mode Controller
