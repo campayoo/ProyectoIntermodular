@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🐔 Chicken Crossing</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="hud">
+            <span>🐔 Nivel: <strong id="hud-level">1</strong></span>
+            <span>❤️ <strong id="hud-lives">3</strong></span>
+            <span>⏱️ <strong id="hud-timer">15</strong>s</span>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- START -->
+        <div id="start-screen" class="overlay active">
+            <div class="card">
+                <div class="big-emoji anim-bounce">🐔</div>
+                <h1>Chicken Crossing</h1>
+                <p class="sub">¿Por qué cruzó la gallina la carretera?<br><em>¡Para llegar al otro lado!</em></p>
+                <div class="rules">
+                    <div class="rule"><span class="key">← ↓ ↑ →</span> Moverse</div>
+                    <div class="rule"><span class="key">ESPACIO / ↑</span> ¡Cruzar!</div>
+                    <div class="rule"><span class="icon">🚗</span> Espera el hueco exacto</div>
+                    <div class="rule"><span class="icon">🏁</span> Cruza todos los carriles</div>
+                </div>
+                <button id="btn-start" class="btn">¡A cruzar!</button>
+            </div>
+        </div>
+
+        <!-- GAME OVER -->
+        <div id="gameover-screen" class="overlay">
+            <div class="card">
+                <div class="big-emoji">💀</div>
+                <h1 style="color:#ff6b6b">¡Atropellada!</h1>
+                <p id="go-msg" class="sub"></p>
+                <p class="final">Cruces completados: <strong id="go-score">0</strong></p>
+                <button id="btn-restart" class="btn">Reintentar</button>
+            </div>
+        </div>
+
+        <!-- WIN -->
+        <div id="win-screen" class="overlay">
+            <div class="card">
+                <div class="big-emoji anim-bounce">🏆</div>
+                <h1>¡Nivel superado!</h1>
+                <p id="win-msg" class="sub"></p>
+                <button id="btn-next" class="btn">Siguiente nivel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+
+</html>
