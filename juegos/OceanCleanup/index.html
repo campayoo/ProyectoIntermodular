@@ -32,6 +32,14 @@
                 <span class="hud-icon">⏱️</span>
                 <span>Tiempo: <strong id="timer">60</strong>s</span>
             </div>
+            <div class="hud-item hud-level">
+                <span class="hud-icon">🏆</span>
+                <span>Nivel: <strong id="level-count">1</strong></span>
+            </div>
+            <div class="hud-item hud-record">
+                <span class="hud-icon">🥇</span>
+                <span>Récord: <strong id="record-count">1</strong></span>
+            </div>
         </div>
 
         <!-- Canvas -->
@@ -65,6 +73,11 @@
 
         <!-- Popup de penalización -->
         <div id="penalty-popup" class="hidden"></div>
+
+        <!-- Splash de Nivel -->
+        <div id="level-splash" class="overlay hidden">
+            <h1 id="splash-text">Nivel 1</h1>
+        </div>
     </div>
 
     <script src="js/game.js"></script>
