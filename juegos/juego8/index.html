@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energía Solar - Acción por el Clima (ODS 13)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-container">
+        <div id="ui-layer">
+            <div class="stat-box">
+                <span class="label">PUNTOS</span>
+                <span id="score">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="label">VIDAS</span>
+                <div id="lives-container">
+                    <span class="life">❤️</span>
+                    <span class="life">❤️</span>
+                    <span class="life">❤️</span>
+                </div>
+            </div>
+            <div class="stat-box">
+                <span class="label">TIEMPO</span>
+                <span id="timer">20</span>s
+            </div>
+            <div id="round-info">
+                RONDA <span id="round-number">1</span>
+                <div id="target-info">OBJETIVO: <span id="target-score">10</span></div>
+            </div>
+        </div>
+
+        <div id="game-canvas">
+            <div id="house">
+                <div class="solar-panels"></div>
+                <div class="windows">
+                    <div class="window"></div>
+                    <div class="window"></div>
+                </div>
+                <div class="door"></div>
+            </div>
+        </div>
+
+        <div id="overlay" class="hidden">
+            <div id="message-box">
+                <h1 id="overlay-title">¡RONDA COMPLETADA!</h1>
+                <p id="overlay-text">¡Buen trabajo! Has recolectado suficiente energía solar.</p>
+                <button id="action-button">Siguiente Ronda</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

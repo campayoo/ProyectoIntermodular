@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sky Dodger: Aventura Aérea</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui-layer">
+            <div id="score-board">
+                Nivel: <span id="level">1</span> |
+                Tiempo: <span id="timer">15</span>s |
+                Puntuación: <span id="score">0</span>
+            </div>
+            <div id="level-screen" class="screen hidden">
+                <h1 id="level-title">Nivel Completado!</h1>
+                <p>Siguiente nivel en <span id="next-level-timer">3</span>...</p>
+            </div>
+            <div id="start-screen" class="screen">
+                <h1>Sky Dodger</h1>
+                <p>Esquiva águilas y aviones</p>
+                <button id="start-btn">Jugar</button>
+            </div>
+            <div id="game-over-screen" class="screen hidden">
+                <h1>¡Juego Terminado!</h1>
+                <p>Puntuación Final: <span id="final-score">0</span></p>
+                <button id="restart-btn">Jugar de Nuevo</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/game.js"></script>
+</body>
+
+</html>

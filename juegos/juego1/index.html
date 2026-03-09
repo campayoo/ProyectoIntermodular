@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ODS 14: Vida Submarina - Limpieza Oceánica</title>
+    <title>EcoPulse: Reilumina el Mañana</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-
     <div id="game-container">
-        <div id="ui-layer">
-            <div class="stat">Plástico: <span id="score">0</span></div>
-            <div class="stat">Oxígeno: <span id="lives">100</span>%</div>
-        </div>
+        <header>
+            <div class="stat">Puntuación: <span id="score">0</span></div>
+            <div id="lives-container">
+                <span class="life">🌍</span>
+                <span class="life">🌍</span>
+                <span class="life">🌍</span>
+                <span class="life">🌍</span>
+            </div>
+            <div class="stat">Tiempo: <span id="timer">5</span>s</div>
+        </header>
 
-        <canvas id="gameCanvas"></canvas>
+        <main>
+            <div id="vector-city-container">
+                <svg viewBox="0 0 500 500" id="city-svg">
+                    <!-- Background / Water / Parks -->
+                    <rect x="0" y="0" width="500" height="500" fill="#05080c" />
+                    <!-- River -->
+                    <path d="M 0 420 Q 150 400 250 440 T 500 420 L 500 500 L 0 500 Z" fill="#0a1a2e" opacity="0.6" />
 
-        <div id="game-over">
-            <h1>MISIÓN FALLIDA</h1>
-            <p>El océano necesita más ayuda. Limpieza total: <span id="final-score">0</span></p>
-            <button onclick="resetGame()">REINTENTAR</button>
+                    <!-- Roads / Grid -->
+                    <path d="M 0 250 L 500 250 M 250 0 L 250 500" stroke="#111" stroke-width="15" fill="none" />
+
+                    <!-- Parks / Green zones -->
+                    <rect x="20" y="20" width="210" height="210" fill="#0a1a0a" rx="10" />
+                    <rect x="270" y="270" width="210" height="130" fill="#0a1a0a" rx="10" />
+
+                    <!-- City Parts / Buildings -->
+                    <!-- District 1 - Residential (Yellow/White) -->
+                    <rect x="50" y="50" width="50" height="50" class="city-part" data-type="res" rx="2" />
+                    <rect x="120" y="50" width="50" height="50" class="city-part" data-type="res" rx="2" />
+                    <rect x="50" y="120" width="120" height="50" class="city-part" data-type="res" rx="2" />
+
+                    <!-- District 2 - Tech/Solar (Cyan) -->
+                    <rect x="290" y="50" width="70" height="70" class="city-part" data-type="solar" rx="4" />
+                    <rect x="380" y="50" width="70" height="30" class="city-part" data-type="solar" rx="2" />
+                    <rect x="380" y="90" width="70" height="30" class="city-part" data-type="solar" rx="2" />
+                    <rect x="290" y="140" width="160" height="50" class="city-part" data-type="tech" rx="3" />
+
+                    <!-- District 3 - Industrial (Orange) -->
+                    <rect x="50" y="290" width="80" height="80" class="city-part" data-type="ind" rx="5" />
+                    <rect x="150" y="290" width="50" height="30" class="city-part" data-type="ind" rx="2" />
+                    <rect x="150" y="340" width="50" height="30" class="city-part" data-type="ind" rx="2" />
+
+                    <!-- District 4 - Landmarks (Magenta) -->
+                    <circle cx="375" cy="335" r="35" class="city-part" data-type="monument" />
+                    <rect x="290" y="440" width="100" height="40" class="city-part" data-type="res" rx="2" />
+
+                    <!-- Trees (Fixed Greenery) -->
+                    <circle cx="220" cy="40" r="5" fill="#1a4a1a" />
+                    <circle cx="200" cy="60" r="5" fill="#1a4a1a" />
+                    <circle cx="30" cy="220" r="5" fill="#1a4a1a" />
+                    <circle cx="470" cy="260" r="5" fill="#1a4a1a" />
+
+                    <!-- Central Hub -->
+                    <rect x="235" y="235" width="30" height="30" id="power-station" fill="#111" stroke="#333" rx="5" />
+                </svg>
+                <div id="grid-overlay">Red Eléctrica: <span id="percent">0</span>%</div>
+            </div>
+
+            <div id="controls">
+                <div class="progress-bar-container">
+                    <div id="energy-progress"></div>
+                </div>
+                <button id="generate-btn">¡GENERA ENERGÍA!</button>
+                <p class="instruction">¡Ilumina cada distrito de la ciudad!</p>
+            </div>
+        </main>
+
+        <div id="message-overlay" class="hidden">
+            <div class="overlay-content">
+                <h2 id="result-text"></h2>
+                <div class="score-display">Puntaje Total: <span id="final-score-display">0</span></div>
+                <button id="restart-btn">Siguiente Ronda</button>
+            </div>
         </div>
     </div>
-
-    <script src="js/game.js" defer></script>
+    <script src="js/game.js"></script>
 </body>
+
 </html>
