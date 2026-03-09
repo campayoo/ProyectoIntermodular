@@ -284,9 +284,15 @@ function drawEntity(e) {
 
 // ── Hit test ──────────────────────────────────────────────
 function hitTest(e, cx, cy) {
-    const dx = e.x - cx;
-    const dy = (e.y + Math.sin(e.wobble) * 4) - cy;
-    return Math.sqrt(dx * dx + dy * dy) < e.size * 0.9;
+    const yOffset = Math.sin(e.wobble) * 4;
+    const halfSize = e.size / 2;
+
+    return (
+        cx >= e.x - halfSize &&
+        cx <= e.x + halfSize &&
+        cy >= e.y + yOffset - halfSize &&
+        cy <= e.y + yOffset + halfSize
+    );
 }
 
 // ── Show floating text ────────────────────────────────────
