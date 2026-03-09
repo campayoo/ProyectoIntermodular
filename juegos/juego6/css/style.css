@@ -80,6 +80,12 @@ canvas {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+#lives-container {
+    color: #ff4757;
+    margin-left: 5px;
+    letter-spacing: 2px;
+}
+
 #start-screen {
     background-color: rgba(0, 0, 0, 0.8);
 }
