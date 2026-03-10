@@ -13,6 +13,7 @@ const restartBtn = document.getElementById('restart-btn');
 const levelElement = document.getElementById('level');
 const timerElement = document.getElementById('timer');
 const nextLevelTimerElement = document.getElementById('next-level-timer');
+const livesContainer = document.getElementById('lives-container');
 
 let frames = 0;
 let score = 0;
@@ -25,6 +26,9 @@ let isLevelTransition = false;
 let obstacleFrequency = 60; // Base frames between obstacles
 let lastTimeUpdate = 0; // For tracking seconds accurately
 let availableZones = [0, 1, 2]; // 0: Top, 1: Middle, 2: Bottom
+let lives = 4;
+let contaminationTimer = 0;
+let isContaminated = false;
 
 // Game constants
 const GRAVITY = 0.25;
@@ -151,10 +155,17 @@ class Obstacle {
 let bird;
 let obstacles = [];
 
+function updateLivesUI() {
+    if (livesContainer) {
+        livesContainer.innerText = '🌍'.repeat(Math.max(0, lives));
+    }
+}
+
 function init(resetLevel = true) {
     if (resetLevel) {
         level = 1;
         score = 0;
+        lives = 4;
     }
     levelTimeLeft = 15;
     bird = new Bird();
@@ -164,10 +175,13 @@ function init(resetLevel = true) {
     obstacleFrequency = Math.max(25, 120 - (level * 10)); // Much rarer obstacles (was ~60)
     isGameOver = false;
     isLevelTransition = false;
+    isContaminated = false;
+    contaminationTimer = 0;
 
     scoreElement.innerText = score;
     levelElement.innerText = level;
     timerElement.innerText = levelTimeLeft;
+    updateLivesUI();
 
     startScreen.classList.add('hidden');
     gameOverScreen.classList.add('hidden');
@@ -211,7 +225,26 @@ function animate(currentTime) {
         }
     }
 
+    ctx.globalAlpha = 1.0; // Always reset alpha at start of frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw solid sky background on canvas (replaces CSS gradient)
+    const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    skyGradient.addColorStop(0, '#87CEEB');
+    skyGradient.addColorStop(1, '#E0F6FF');
+    ctx.fillStyle = skyGradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Contamination effect
+    if (isContaminated) {
+        contaminationTimer--;
+        if (contaminationTimer <= 0) {
+            isContaminated = false;
+        }
+        // Draw a murky brownish/gray overlay on top of the sky
+        ctx.fillStyle = 'rgba(101, 67, 33, 0.4)'; // Sepia/Dirty brown
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     bird.update();
 
@@ -305,7 +338,8 @@ function animate(currentTime) {
         }
 
         if (collision) {
-            gameOver();
+            gameOver(index);
+            return; // Stop checking after a collision
         }
 
         if (obstacle.markedForDeletion) {
@@ -317,11 +351,41 @@ function animate(currentTime) {
     animationId = requestAnimationFrame(animate);
 }
 
-function gameOver() {
-    isGameOver = true;
-    cancelAnimationFrame(animationId);
-    finalScoreElement.innerText = score;
-    gameOverScreen.classList.remove('hidden');
+function gameOver(hitIndex) {
+    lives--;
+    updateLivesUI();
+
+    // Remove the obstacle that was hit
+    if (hitIndex !== undefined && hitIndex >= 0 && hitIndex < obstacles.length) {
+        obstacles.splice(hitIndex, 1);
+    }
+
+    if (lives > 0) {
+        // Temporary "crash" state
+        isContaminated = true;
+        contaminationTimer = 180; // 3 seconds at 60fps
+
+        // Reset only the player position, keep remaining obstacles
+        bird = new Bird();
+    } else {
+        // Final death: draw the contaminated sky before stopping
+        isGameOver = true;
+        cancelAnimationFrame(animationId);
+
+        // Manually render the final contaminated frame
+        ctx.globalAlpha = 1.0;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        skyGradient.addColorStop(0, '#87CEEB');
+        skyGradient.addColorStop(1, '#E0F6FF');
+        ctx.fillStyle = skyGradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(101, 67, 33, 0.4)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        finalScoreElement.innerText = score;
+        gameOverScreen.classList.remove('hidden');
+    }
 }
 
 // Input handling
