@@ -761,7 +761,6 @@ function startGame() {
 
 function nextLevel() {
     level++;
-    lives = 3;
     timeLeft = 15;
     state = 'playing';
     showScreen(null);
