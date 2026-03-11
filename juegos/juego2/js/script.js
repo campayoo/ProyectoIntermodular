@@ -85,8 +85,14 @@ function startGame() {
     game.health = 100;
     game.round = 1;
     game.timer = 15;
-    game.speed = game.baseSpeed;
-    game.spawnRate = 1200;
+
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    game.speed = game.baseSpeed * multiplier;
+    game.spawnRate = 1200 / multiplier;
+    // ----------------------------
+
     game.lastSpawn = performance.now();
     game.lastFrame = performance.now();
     game.lastTick = performance.now();
@@ -151,6 +157,14 @@ function clearActiveNotes() {
 }
 
 function pauseForNextRound() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onGameComplete' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     game.state = 'PAUSED';
     game.round++;
     clearActiveNotes();
@@ -319,6 +333,14 @@ function updateHUD() {
 }
 
 function endGame() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     game.state = 'ENDED';
     UI.finalScore.textContent = game.score.toString().padStart(4, '0');
 

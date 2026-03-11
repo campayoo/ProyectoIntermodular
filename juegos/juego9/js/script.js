@@ -4,15 +4,20 @@
  */
 
 // --- Configuración ---
+// ---- DIFFICULTY SCALING ----
+const urlParams = new URLSearchParams(window.location.search);
+const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+// ----------------------------
+
 const CONFIG = {
-    baseRoundTime: 15,
+    baseRoundTime: Math.max(5, Math.ceil(15 / multiplier)),
     baseTargetScore: 5,
-    baseSpawnRate: 1000,    // ms (Aún más rápido para mayor flujo)
-    baseSpeed: 3,           // px por frame (Más dinámico)
+    baseSpawnRate: 1000 / multiplier,    // ms
+    baseSpeed: 3 * multiplier,           // px por frame
     startingLives: 3,
-    carSize: 50,            // Largo del coche
+    carSize: 50,
     intersectionSize: 120,
-    stopOffset: 70          // Distancia al centro para parar en rojo
+    stopOffset: 70
 };
 
 // --- Estado ---
@@ -131,7 +136,7 @@ function spawnCar() {
     const canvasH = 600;
 
     let startX, startY, vx, vy, type, dirClass;
-    const speed = CONFIG.baseSpeed + (gameState.currentRound * 0.5) + (Math.random());
+    const speed = (CONFIG.baseSpeed + (gameState.currentRound * 0.5) + (Math.random())); // CONFIG.baseSpeed is already scaled
 
     switch (dir) {
         case 0: // L to R (Bottom Lane)
@@ -319,6 +324,18 @@ function changeLives(val) {
 }
 
 function endRound() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        if (gameState.score >= gameState.targetScore) {
+            window.parent.postMessage({ type: 'onGameComplete' }, '*');
+        } else {
+            window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        }
+        return; 
+    }
+    // ------------------------------
+
     gameState.isPaused = true;
     if (gameState.score >= gameState.targetScore) {
         gameState.currentRound++;
@@ -330,6 +347,14 @@ function endRound() {
 }
 
 function gameOver(reason) {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     gameState.isPaused = true;
     gameState.spawnIntervals.forEach(clearInterval);
     gameState.spawnIntervals = [];

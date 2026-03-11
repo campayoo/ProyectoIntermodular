@@ -329,10 +329,15 @@ const VEHICLE_TYPES = [
 ];
 
 function getLaneConfig(laneIdx) {
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    // ----------------------------
+
     // Alternate directions per lane
     const dir = laneIdx % 2 === 0 ? 1 : -1;
     // Add a bit of speed variation between lanes so they don't move in lock-step
-    const speed = (0.6 + level * 0.12) + rand(-0.1, 0.1);
+    const speed = ((0.6 + level * 0.12) + rand(-0.1, 0.1)) * multiplier;
     const gap = Math.max(200 - level * 8, 100);
     return { dir, speed, gap };
 }
@@ -594,6 +599,14 @@ function killChicken(v) {
 }
 
 function onChickenSafe() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onGameComplete' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     if (chicken.dead || state !== 'playing') return; // Final guard
     updateHUD();
     spawnParticles(chicken.x, chicken.y, '#ffe44d', 25, 5);
@@ -609,6 +622,14 @@ function onChickenSafe() {
 }
 
 function endGame(reason) {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     state = 'dead';
     cancelAnimationFrame(animId);
     goMsg.textContent = reason;
@@ -750,7 +771,13 @@ function initLevel() {
 function startGame() {
     level = 1;
     lives = 3;
-    timeLeft = 15;
+    
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    timeLeft = Math.max(5, Math.ceil(15 / multiplier));
+    // ----------------------------
+    
     state = 'playing';
     showScreen(null);
     initLevel();
@@ -761,7 +788,13 @@ function startGame() {
 
 function nextLevel() {
     level++;
-    timeLeft = 15;
+    
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    timeLeft = Math.max(5, Math.ceil(15 / multiplier));
+    // ----------------------------
+    
     state = 'playing';
     showScreen(null);
     initLevel();

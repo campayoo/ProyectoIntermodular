@@ -19,17 +19,21 @@ const finalScoreElement = document.getElementById('final-score');
 const feedbackText = document.getElementById('feedback-text');
 const nextRoundScreen = document.getElementById('next-round');
 
-// Variables de estado
+// ---- DIFFICULTY SCALING ----
+const urlParams = new URLSearchParams(window.location.search);
+const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+// ----------------------------
+
 let score = 0;
 let totalScore = 0;
-let timeLeft = 15; // Rondas de 15 segundos
+let timeLeft = Math.max(5, Math.ceil(15 / multiplier)); // Rondas de 15 segundos
 let currentRound = 1;
 let trashGoal = 5;
 let gameActive = true;
 let objects = [];
 let floatingTexts = [];
-let spawnRate = 0.02; // Empieza más fácil
-let maxObjects = 4;  // Pocas cosas al principio
+let spawnRate = 0.02 * multiplier; // Empieza más fácil
+let maxObjects = Math.ceil(4 * multiplier);  // Pocas cosas al principio
 let mouseX = canvas.width / 2;
 let particles = [];
 let lightPulse = 0;
@@ -137,7 +141,10 @@ class Waste {
         this.opacity = 1; // Directamente visible
         this.rotation = Math.random() * Math.PI * 2;
         this.rotationSpeed = (Math.random() - 0.5) * 0.04;
-        this.fallSpeed = 1.5 + Math.random() * 1.5 + (currentRound * 0.3); // Escalado más suave
+        
+        // ---- DIFFICULTY SCALING ----
+        this.fallSpeed = (1.5 + Math.random() * 1.5 + (currentRound * 0.3)) * multiplier;
+        // ----------------------------
 
         const randomType = Math.random();
         if (randomType < 0.75) {
@@ -311,7 +318,7 @@ function drawCityTopDown() {
 }
 
 function handleObjects() {
-    if (Math.random() < spawnRate + (currentRound * 0.005) && objects.length < maxObjects + currentRound) {
+    if (Math.random() < spawnRate + (currentRound * 0.005 * multiplier) && objects.length < maxObjects + currentRound) {
         objects.push(new Waste());
     }
 
@@ -418,6 +425,14 @@ function checkRoundEnd() {
 }
 
 function startNextRound() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onGameComplete' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     gameActive = false; // Pausa el juego
     nextRoundScreen.style.display = 'flex';
 }
@@ -431,10 +446,10 @@ function continueToNextRound() {
     currentRound++;
     trashGoal += 4;
     score = 0;
-    timeLeft = 15;
+    timeLeft = Math.max(5, Math.ceil(15 / multiplier));
 
     // Dificultad Progresiva
-    spawnRate += 0.008;
+    spawnRate += 0.008 * multiplier;
     maxObjects += 1;
 
     nextRoundScreen.style.display = 'none';
@@ -443,6 +458,14 @@ function continueToNextRound() {
 }
 
 function endGame() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     gameActive = false;
     clearInterval(gameTimer);
     if (gameOverScreen) {

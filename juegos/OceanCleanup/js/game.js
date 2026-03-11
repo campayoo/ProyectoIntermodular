@@ -212,10 +212,14 @@ function createEntity() {
     // Spawn from left or right edge, travel across
     const fromLeft = Math.random() < 0.5;
     const y = rand(HUD_HEIGHT + 40, H - 40);
-    const baseSpeed = rand(1.5, 3.5); // Slower initial speed
-    // More gradual speed multiplier
-    const speedMult = Math.min(4, 1 + (currentLevel - 1) * 0.08);
+    const baseSpeed = rand(1.5, 3.5);
+    
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    const speedMult = Math.min(4, (1 + (currentLevel - 1) * 0.08) * multiplier);
     const speed = baseSpeed * speedMult;
+    // ----------------------------
 
     return {
         isTrash,
@@ -243,7 +247,13 @@ function spawnEntity() {
     const elapsed = GAME_DURATION - timeLeft;
     const baseInterval = Math.max(600, 1200 - elapsed * 30); // Slower initial spawn
     // Cap spawn frequency at 150ms 
-    const interval = Math.max(150, baseInterval / (1 + (currentLevel - 1) * 0.06));
+    
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    const interval = Math.max(100, (baseInterval / (1 + (currentLevel - 1) * 0.06)) / multiplier);
+    // ----------------------------
+    
     spawnTimer = setTimeout(spawnEntity, interval);
 }
 
@@ -352,6 +362,14 @@ function checkLose() {
 
 // ── End game ──────────────────────────────────────────────
 function endGame(win, message) {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: win ? 'onGameComplete' : 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     running = false;
     clearTimeout(spawnTimer);
     clearInterval(countdownTimer);
@@ -464,7 +482,13 @@ function startGame() {
     trashCount = 0;
     fishClicked = 0;
     escaped = 0;
-    timeLeft = GAME_DURATION;
+    
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    timeLeft = Math.max(5, Math.ceil(GAME_DURATION / multiplier));
+    // ----------------------------
+    
     running = true;
 
     startScreen.classList.add('hidden');
