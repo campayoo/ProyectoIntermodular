@@ -1,4 +1,4 @@
-﻿const canvas = document.getElementById('gameCanvas');
+const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 const scoreElement = document.getElementById('score');
@@ -167,12 +167,18 @@ function init(resetLevel = true) {
         score = 0;
         lives = 4;
     }
-    levelTimeLeft = 15;
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    levelTimeLeft = Math.max(5, Math.ceil(15 / multiplier));
+    // ----------------------------
+
     bird = new Bird();
     obstacles = [];
     frames = 0;
-    gameSpeed = 4 + (level * 1.0); // Much slower start (was 7.5+)
-    obstacleFrequency = Math.max(25, 120 - (level * 10)); // Much rarer obstacles (was ~60)
+    gameSpeed = (4 + (level * 1.0)) * multiplier;
+    // ensure integer and minimum frequency to avoid overlapping/invisible obstacles
+    obstacleFrequency = Math.max(20, Math.floor((120 - (level * 10)) / multiplier));
     isGameOver = false;
     isLevelTransition = false;
     isContaminated = false;
@@ -192,6 +198,14 @@ function init(resetLevel = true) {
 }
 
 function startLevelTransition() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onGameComplete' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     isLevelTransition = true;
     levelScreen.classList.remove('hidden');
 
@@ -352,6 +366,14 @@ function animate(currentTime) {
 }
 
 function gameOver(hitIndex) {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     lives--;
     updateLivesUI();
 

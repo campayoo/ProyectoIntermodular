@@ -4,12 +4,17 @@
  */
 
 // --- Configuración y Estado ---
+// ---- DIFFICULTY SCALING ----
+const urlParams = new URLSearchParams(window.location.search);
+const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+// ----------------------------
+
 const CONFIG = {
-    baseRoundTime: 20,
+    baseRoundTime: Math.max(5, Math.ceil(20 / multiplier)),
     baseTargetScore: 10,
-    baseSpawnRateSun: 1200,    // ms
-    baseSpawnRateCloud: 2000,  // ms
-    baseFallSpeed: 2,          // px por frame
+    baseSpawnRateSun: 1200 / multiplier,    // ms
+    baseSpawnRateCloud: 2000 / multiplier,  // ms
+    baseFallSpeed: 2 * multiplier,          // px por frame
     difficultyMultiplier: 1.2,
     startingLives: 3
 };
@@ -138,7 +143,7 @@ function createGameObject(type) {
     const dy = targetY - startY;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    const speed = CONFIG.baseFallSpeed + (gameState.currentRound * 0.8) + (Math.random() * 2);
+    const speed = (CONFIG.baseFallSpeed + (gameState.currentRound * 0.8) + (Math.random() * 2)); // CONFIG.baseFallSpeed is already scaled
 
     const obj = {
         el: el,
@@ -281,6 +286,18 @@ function showFeedback(text, x, y, isNegative) {
 
 // --- Estados Finales ---
 function endRound() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        if (gameState.score >= gameState.targetScore) {
+            window.parent.postMessage({ type: 'onGameComplete' }, '*');
+        } else {
+            window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        }
+        return; 
+    }
+    // ------------------------------
+
     gameState.isPaused = true;
     if (gameState.score >= gameState.targetScore) {
         gameState.currentRound++;
@@ -292,6 +309,14 @@ function endRound() {
 }
 
 function gameOver(reason) {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        window.parent.postMessage({ type: 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     gameState.isPaused = true;
     gameState.spawnIntervals.forEach(clearInterval);
     showOverlay('GAME OVER', `${reason}. Puntuación final: ${gameState.score} en la Ronda ${gameState.currentRound}.`, 'Reiniciar Juego');
