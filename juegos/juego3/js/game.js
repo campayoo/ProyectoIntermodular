@@ -100,7 +100,15 @@
         state.zoneA = [];
         state.zoneB = [];
         state.pendingTasks = [];
-        state.timeLeft = ROUND_DURATION;
+        
+        // ---- DIFFICULTY SCALING ----
+        const urlParams = new URLSearchParams(window.location.search);
+        const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+        const scaledDuration = ROUND_DURATION / multiplier;
+        const scaledSpawnInterval = BASE_SPAWN_INTERVAL / multiplier;
+        // ----------------------------
+
+        state.timeLeft = scaledDuration;
         state.running = true;
 
         // Limpiar zonas
@@ -127,14 +135,14 @@
                 endRound();
             }
             // Actualizar anillo
-            const progress = 1 - state.timeLeft / ROUND_DURATION;
+            const progress = 1 - state.timeLeft / scaledDuration;
             timerFill.style.strokeDashoffset = (circumference * progress).toString();
             timerText.textContent = Math.ceil(state.timeLeft);
             if (state.timeLeft <= 5) timerFill.classList.add('warning');
         }, 250);
 
         // Spawner
-        const interval = Math.max(MIN_SPAWN_INTERVAL, BASE_SPAWN_INTERVAL - (state.round - 1) * 250);
+        const interval = Math.max(MIN_SPAWN_INTERVAL, scaledSpawnInterval - (state.round - 1) * 250);
         spawnTask(); // primera tarea inmediata
         state.spawnInterval = setInterval(() => {
             if (state.running) spawnTask();
@@ -329,6 +337,19 @@
 
     // ═══ FIN DE RONDA ═══
     function endRound() {
+        // ---- INFINITE MODE SIGNAL ----
+        const isInfinite = location.search.includes('multiplier');
+        if (isInfinite && window.parent && window.parent.postMessage) {
+            const totalA = state.zoneA.reduce((s, w) => s + w, 0);
+            const totalB = state.zoneB.reduce((s, w) => s + w, 0);
+            const diff = Math.abs(totalA - totalB);
+            const totalTasks = state.zoneA.length + state.zoneB.length;
+            const isWin = diff <= 1 && totalTasks >= 2;
+            window.parent.postMessage({ type: isWin ? 'onGameComplete' : 'onLifeLost' }, '*');
+            return; 
+        }
+        // ------------------------------
+
         state.running = false;
         clearInterval(state.timerInterval);
         clearInterval(state.spawnInterval);

@@ -36,12 +36,19 @@ function shuffle(array) {
 
 function initGame() {
     state.energy = 0;
-    state.timeLeft = 5;
+
+    // ---- DIFFICULTY SCALING ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const multiplier = parseFloat(urlParams.get('multiplier')) || 1.0;
+    state.timeLeft = Math.max(2, 5 / multiplier);
+    state.baseEnergyPerClick = 7 / Math.sqrt(multiplier); // Scale click power slightly
+    // ----------------------------
+
     state.gameActive = true;
     state.timerStarted = false;
     elements.overlay.classList.add('hidden');
     elements.overlay.classList.remove('win', 'loss');
-    elements.timer.textContent = state.timeLeft;
+    elements.timer.textContent = Math.ceil(state.timeLeft);
 
     // Clear visuals
     elements.parts.forEach(p => p.classList.remove('active'));
@@ -100,6 +107,15 @@ function updateUI() {
 }
 
 function endRound() {
+    // ---- INFINITE MODE SIGNAL ----
+    const isInfinite = location.search.includes('multiplier');
+    if (isInfinite && window.parent && window.parent.postMessage) {
+        const won = state.energy >= 99;
+        window.parent.postMessage({ type: won ? 'onGameComplete' : 'onLifeLost' }, '*');
+        return; 
+    }
+    // ------------------------------
+
     state.gameActive = false;
     const won = state.energy >= 99;
 
